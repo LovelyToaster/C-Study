@@ -8,6 +8,7 @@ int main()
     printf("input 2.- \n");
     printf("input 3.* \n");
     printf("input 4./ \n");
+    printf("input 5.ax*x+bx+c \n");
     printf("input 5.END \n");
     scanf("%d" ,&d);
     if (d>0&&d<=5)
