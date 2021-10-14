@@ -3,13 +3,13 @@
 #include<stdlib.h>
 int main()
 {
-    int a,b,c,d;
+    int a,b,c,d,x1,x2;
     printf("input 1.+ \n");
     printf("input 2.- \n");
     printf("input 3.* \n");
     printf("input 4./ \n");
-    printf("input test.ax*x+bx+c \n"); //尚未完工//
-    printf("input 5.END \n");
+    printf("input 5.ax*x+bx+c \n");
+    printf("input 6.END \n");
     scanf("%d" ,&d);
     if (d>0&&d<=5)
     {
@@ -35,7 +35,13 @@ int main()
            c=a/b;
            printf("output: %d\n" ,c);
            break; 
-           case 5:return 0;
+           case 5:printf("input a b c:\n");
+           scanf("%d%d%D",&a,&b,&c);
+           x1=(-b+sqrt(b*b-4*a*c))/(2*a);
+           x2=(-b-sqrt(b*b-4*a*c))/(2*a);
+           printf("%d %d\n",x1,x2);
+           break;
+           case 6:return 0;
         }
     }
     else
@@ -45,3 +51,4 @@ int main()
     system("pause");
     return 0;
 }
+
