@@ -1,0 +1,28 @@
+1.
+(2) 局部变量。
+(3) 得到max=5，因为::a让a使用了全局变量。
+2.
+(2) 无法运行，不能确定选择哪个类型的函数。
+3.
+(2) 无法运行，因为main函数中存在fan()，而fun函数中a没有默认数值，导致无法输出。
+4.
+#include <bits/stdc++.h>
+using namespace std;
+int max(int a=0,int b=0,int c=0)
+{
+    if(a>b) swap(a,b);
+    if(b>c) swap(b,c);
+    if(a>c) swap(a,c);
+    return c;
+}
+int main()
+{
+    int a,b,c;
+    cout<<"请输入三个正整数:"<<endl;
+    cin>>a>>b>>c
+    cout<<"最大值为: "<<max(a,b,c)<<endl;
+    cout<<"请输入两个正整数:"<<endl;
+    cin>>a>>b
+    cout<<"最大值为: "<<max(a,b)<<endl;
+    return 0;
+}
