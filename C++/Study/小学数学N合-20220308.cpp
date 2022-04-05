@@ -7,7 +7,7 @@ int main()
     cin >> T;
     if (T == 1)
     {
-        cout << "I Love Luogu!" << endl;
+        cout << "I love Luogu!" << endl;
     }
     else if (T == 2)
     {
@@ -43,16 +43,42 @@ int main()
     {
         cout << 2 * PI * 5 << endl
              << PI * 5 * 5 << endl
-             << 4 / 3 * PI * 5 * 5 * 5 << endl;
+             << 4 * PI * 5 * 5 * 5 / 3 << endl;
     }
     else if (T == 9)
     {
-        cout << "14" << endl;
+        cout << "22" << endl;
     }
     else if (T == 10)
     {
         cout << "9" << endl;
     }
-
+    else if (T == 11)
+    {
+        cout << 100.0 / 3 << endl;
+    }
+    else if (T == 12)
+    {
+        cout << "13" << endl
+             << "R" << endl;
+    }
+    else if (T == 13)
+    {
+        double v;
+        v = 4 * 4 * 4 * 4 * PI / 3 + 4 * 10 * 10 * 10 * PI / 3;
+        cout << int(cbrt(v)) << endl;
+    }
+    else if (T == 14)
+    {
+        int p,v,i=1;
+        for(;i<120;++i) 
+        {
+            p = 10+110-i;
+            v = p * i;
+            if (v == 3500)
+                break;
+        }
+        cout << i <<endl;
+    }
     return 0;
 }
