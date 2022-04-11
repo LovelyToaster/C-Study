@@ -6,22 +6,26 @@ private:
     int id;
     char name[10];
     int age;
+
 public:
-    void input();
+    student()
+    {
+        id = 0;
+        name[10] = 0;
+        age = 0;
+    }
     void display();
 };
-void student::input()
-{
-    cin >> id >> name >> age;
-}
 void student::display()
 {
-    cout << id << " " << name << " " << age << endl;
+    cin >> id >> name >> age;
+    cout << "id:" << id << ends << endl;
+    cout << "name:" << name << ends << endl;
+    cout << "age:" << age << ends << endl;
 }
 int main()
 {
     student std;
-    std.input();
     std.display();
     return 0;
 }
