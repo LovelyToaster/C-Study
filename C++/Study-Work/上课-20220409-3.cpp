@@ -10,15 +10,12 @@ private:
 public:
     student()
     {
-        id = 0;
-        name[10] = 0;
-        age = 0;
+        cin >> id >> name >> age;
     }
     void display();
 };
 void student::display()
 {
-    cin >> id >> name >> age;
     cout << "id:" << id << ends << endl;
     cout << "name:" << name << ends << endl;
     cout << "age:" << age << ends << endl;

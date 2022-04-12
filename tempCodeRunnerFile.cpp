@@ -1,28 +1,21 @@
-#include <iostream>
+#include<bits/stdc++.h>
 using namespace std;
-int num(int n)
-{
-	int a = 0, b = 0, m = n;
-	while (m != 0)
-	{
-		b = m % 10;
-		a = a * 10 + b;
-		m = m / 10;
-	}
-	if (a == n)
-		return 1;
-	else
-		return 0;
+class S{
+	private:
+	   double round;
+	public:
+	void S_set();
+	void S_out();
+}; 
+void S::S_set(){
+	cin>>round; 
 }
-int main()
-{
-	int x, y = 0;
-	cout << "请输入数据：" << endl;
-	cin >> x;
-	y = num(x);
-	if (y == 1)
-		cout << "此数是回文数。" << endl;
-	else
-		cout << "此数不是回文数。" << endl;
+void S::S_out(){
+	cout<<"S="<<3.14*round*round<<endl;
+}
+int main(){
+	S Sx;
+	Sx.S_set();
+	Sx.S_out();
 	return 0;
 }
