@@ -51,3 +51,32 @@ int main()
 2.先构造的后析构，先析构的后构造。
 3.无法运行，box1没有给定初始值。
 4.无法运行，box3不能确定使用哪个函数。
+实验素材3
+#include <bits/stdc++.h>
+using namespace std;
+class student
+{
+private:
+    int id;
+    char name[10];
+    int age;
+
+public:
+    student()
+    {
+        cin >> id >> name >> age;
+    }
+    void display();
+};
+void student::display()
+{
+    cout << "id:" << id << ends << endl;
+    cout << "name:" << name << ends << endl;
+    cout << "age:" << age << ends << endl;
+}
+int main()
+{
+    student std;
+    std.display();
+    return 0;
+}
