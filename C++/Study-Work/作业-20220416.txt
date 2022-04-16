@@ -1,0 +1,12 @@
+实验素材1
+1.两次，调用Date()。
+2.两次，第一次调用Date(),第二次调用Date(int m,int d=1,int y=2020),两个对象。
+3.t、temp、d
+实验素材2
+1.运行错误，内存被delete多次。 munmap_chunk(): invalid pointer
+2. 正常运行，由系统调用析构函数。
+3.运行错误
+4.正常运行，由系统调用析构函数。
+5.运行错误，对同一块内存free两次。 free(): double free detected in tcache 2
+实验素材3
+代码如下:
