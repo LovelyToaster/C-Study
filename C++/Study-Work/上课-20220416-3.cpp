@@ -36,10 +36,10 @@ int main()
 {
     Student stu[5] =
         {
-            Student("001", 98),
-            Student("002", 99),
-            Student("003", 96),
-            Student("004", 97),
+            Student("001", 90),
+            Student("002", 59),
+            Student("003", 76),
+            Student("004", 82),
             Student("005", 50)};
     Student *p;
     p = stu;
