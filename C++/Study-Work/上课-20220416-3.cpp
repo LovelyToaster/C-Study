@@ -18,7 +18,7 @@ public:
 void Student::MAX(Student *a)
 {
     int temp;
-    for (int i = 0; i < 4; i++)
+    for (int i = 0; i < 4; i++) //冒泡算法 判断最大值
     {
         for (int j = 0; j < 4 - i; j++)
         {
@@ -40,9 +40,9 @@ int main()
             Student("002", 59),
             Student("003", 76),
             Student("004", 82),
-            Student("005", 50)};
-    Student *p;
-    p = stu;
-    stu[5].MAX(p);
+            Student("005", 50)}; //五个学生数据
+    Student *p;                  //定义一个Student的指针
+    p = stu;                     //将stu初始地址赋给p指针
+    stu[5].MAX(p);               //运行stu[5]的max函数，参数为p
     return 0;
 }

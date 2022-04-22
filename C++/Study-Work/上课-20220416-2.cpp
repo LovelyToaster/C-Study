@@ -25,11 +25,10 @@ Desk::~Desk()
 int main()
 {
 	Desk *ptr = new Desk[3]; //调用默认构造函数创建堆对象数组
-	//delete []ptr;			    //delete析构堆对象数组
+	delete[] ptr;			 //delete析构堆对象数组
 	Desk desk[2] = {Desk(), Desk(50, 50, 75)};
 	//根据实参调用具体的构造函数创建对象，由系统调用析构函数完成内存释放
 	Desk *p = new Desk(75, 80, 85); //创建对象
-	delete p;						//delete析构对象
-	delete p;
+	delete[] p;						//delete析构对象
 	return 0;
 }
