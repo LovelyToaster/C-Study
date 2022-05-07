@@ -1,0 +1,22 @@
+实验素材1
+1.void funA()
+    {
+        cout << a1 << endl;
+        cout << a2 << endl;
+        cout << a3 << endl;
+    }
+2.cout << a.a1 << endl;
+3.cout << a.a2 << endl;
+  cout << a.a3 << endl;无法运行程序，因为成员a2、a3已声明不可访问
+实验素材2.1
+1.cout << a1 << endl;
+  cout << a2 << endl;
+2.cout << a3 << endl;成员a3已被声明私有，无法访问
+实验素材2.2
+1.cout << a1 << endl;
+  cout << a2 << endl;
+2.cout << a3 << endl;成员a3已被声明私有，无法访问
+实验素材2.3
+1.cout << a1 << endl;
+  cout << a2 << endl;
+2.cout << a3 << endl;成员a3已被声明私有，无法访问
