@@ -10,6 +10,7 @@ public:
 };
 class RNA //存储检测信息
 {
+    
 public:
     string location;
     string time;
@@ -17,7 +18,10 @@ public:
     string outcome;
     people test;
 };
-int menu() //程序主界面
+int main();
+int i = 0;
+vector<RNA> test1; //定义一个vector类，用于方便人数控制
+int menu()         //程序主界面
 {
     int n;
     system("clear");
@@ -49,11 +53,18 @@ int menu() //程序主界面
     system("clear");
     return n;
 }
+void back()
+{
+    cout << "输入0返回系统主界面(输入其他任意值则结束程序): ";
+    cin >> i;
+    if (i == 0)
+        main();
+    else
+        exit(0);
+}
 void input() //数据录入
 {
-    int i;
     RNA p;
-    vector<RNA> test1; //定义一个vector类，用于方便人数控制
     cout << "请输入需要录入的人数：";
     cin >> i;
     for (int n = 0; n < i; n++)
@@ -78,55 +89,173 @@ void input() //数据录入
         cin >> p.outcome;
         test1.push_back(p);
     }
+    cout << endl
+         << "录入完成！" << endl;
+    back();
+}
+void search1() //姓名查找
+{
+    string t1, t2;
+    cout << "请输入姓名(可以输入部分)：";
+    cin >> t1;
     system("clear");
-    for (int n = 0; n < i; n++)
+    for (int n = 0; n < test1.size(); n++)
     {
-        cout << endl
-             << "检测人姓名：" << test1[n].test.name;
-        cout << endl
-             << "检测人身份证号：" << test1[n].test.ID;
-        cout << endl
-             << "检测地点："
-             << test1[n].location;
-        cout << endl
-             << "检测时间："
-             << test1[n].time;
-        cout << endl
-             << "检测单位："
-             << test1[n].unit;
-        cout
-            << endl
-            << "检测结果："
-            << test1[n].outcome << endl;
+        t2 = test1[n].test.name;
+        if (t2.find(t1) != t2.npos)
+        {
+            cout << "姓名  身份证号  检测地点  检测时间  检测单位  检测结果" << endl;
+            cout << test1[n].test.name << "  " << test1[n].test.ID << "  " << test1[n].location << "  " << test1[n].time << "  " << test1[n].unit << "  " << test1[n].outcome << endl;
+            i = 1;
+        }
     }
-    cout << "输入0返回系统主界面(输入其他任意值则结束程序): ";
-    cin >> i;
-    if (i == 0)
-        menu();
+    if (i != 1)
+        cout << "未查找到相关内容" << endl;
+    back();
 }
-void search1()
+int search2(int i1) //身份证查找
 {
-}
-void search2()
-{
+    int n;
+    string t1;
+    cout << "请输入身份证号：";
+    cin >> t1;
+    system("clear");
+    for (n = 0; n < test1.size(); n++)
+    {
+        if (t1 == test1[n].test.ID)
+        {
+            cout << "姓名  身份证号  检测地点  检测时间  检测单位  检测结果" << endl;
+            cout << test1[n].test.name << "  " << test1[n].test.ID << "  " << test1[n].location << "  " << test1[n].time << "  " << test1[n].unit << "  " << test1[n].outcome << endl;
+            i = 1;
+            break;
+        }
+    }
+    if (i != 1)
+        cout << "未查找到相关内容" << endl;
+    if (i1 == 0)
+        back();
+    return n;
 }
 void search() //数据查询功能
 {
-    int i;
-    cin >> i;
-    if (i == 1)
-        ;
+    int n;
+    system("clear");
+    cout << "=======================================================================================" << endl;
+    cout << endl;
+    cout << "                                    核酸检测管理系统                                    " << endl;
+    cout << endl;
+    cout << "                   1.按姓名查找                             2.按身份证查找              " << endl;
+    cout << endl;
+    cout << "=======================================================================================" << endl;
+    cout << "请输入对应的序号: ";
+    cin >> n;
+    system("clear");
+    while (1)
+    {
+        if (n == 1)
+            search1();
 
-    if (i == 2)
-        ;
+        else if (n == 2)
+            search2(0);
+        else
+        {
+            cout << "没有该操作，请重新输入" << endl;
+            continue;
+        }
+    }
+}
+void changeout()
+{
+    cout << "请输入：";
+}
+void change() //数据修改
+{
+    int n;
+    n = search2(1);
+    while (1)
+    {
+        cout << "1.姓名" << endl
+             << "2.身份证号" << endl
+             << "3.检测地点" << endl
+             << "4.检测时间" << endl
+             << "5.检测单位" << endl;
+        cout << "请输入你要修改的内容：";
+        cin >> i;
+        if (i == 1)
+        {
+            changeout();
+            cin >> test1[n].test.name;
+        }
+        else if (i == 2)
+        {
+            changeout();
+            cin >> test1[n].test.ID;
+        }
+        else if (i == 3)
+        {
+            changeout();
+            cin >> test1[n].location;
+        }
+        else if (i == 4)
+        {
+            changeout();
+            cin >> test1[n].time;
+        }
+        else if (i == 5)
+        {
+            changeout();
+            cin >> test1[n].unit;
+        }
+        cout << "输入0返回主菜单，输入任意键继续修改：";
+        cin >> i;
+        if (i == 0)
+            main();
+        else
+        {
+            system("clear");
+            cout << "姓名  身份证号  检测地点  检测时间  检测单位  检测结果" << endl;
+            cout << test1[n].test.name << "  " << test1[n].test.ID << "  " << test1[n].location << "  " << test1[n].time << "  " << test1[n].unit << "  " << test1[n].outcome << endl;
+        }
+    }
+}
+void output() //输出所有数据
+{
+    cout << "姓名  身份证号  检测地点  检测时间  检测单位  检测结果" << endl;
+    for (int n = 0; n < test1.size(); n++)
+    {
+        cout << test1[n].test.name << "  " << test1[n].test.ID << "  " << test1[n].location << "  " << test1[n].time << "  " << test1[n].unit << "  " << test1[n].outcome << endl;
+    }
+    cout << "输出完毕，共" << test1.size() << "条数据" << endl;
+    back();
+}
+void write()
+{
+    RNA t;
+    char read[20];
+    t.test.name = test1[0].test.name;
+    FILE *fp;
+    fp = fopen("test.dat", "w+");
+    fwrite(&t, sizeof(RNA), 1, fp);
+    fread(read, sizeof(RNA), 1, fp);
+    cout << read << endl;
+    fclose(fp);
 }
 int main()
 {
-    int i;
-    i = menu();
-    if (i == 1)
+
+    int n = 0;
+    n = menu();
+    if (n == 0)
+    {
+        write();
+        exit(0);
+    }
+    else if (n == 1)
         input();
-    else if (i == 2)
+    else if (n == 2)
         search();
-    return 0;
+    else if (n == 3)
+        change();
+    else if (n == 4)
+        output();
 }
