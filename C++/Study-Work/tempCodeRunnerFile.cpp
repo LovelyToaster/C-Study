@@ -1,1 +1,1 @@
-[]
+Derived(int x = 10) : Derived_i(x) { cout << "in Derived" << endl; }

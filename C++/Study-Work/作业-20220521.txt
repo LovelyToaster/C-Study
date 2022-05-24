@@ -1,0 +1,53 @@
+实验素材1
+1.Clicked
+2.将virtual删除后，下面的ptr指针将一直指向基类的Clicked函数
+3.void Person::Clicked()
+  {
+      cout << "in Person!" << endl;
+  }
+实验素材2
+1.template <typename T>
+2.  cout << "average: " << average(n, 5) << endl;
+    cout << "average: " << average(f, 5) << endl;
+    cout << "average: " << average(d, 7) << endl;
+3.代码如下
+#include <iostream>
+using namespace std;
+template <typename T>
+double average(T src[], int len)
+{
+    for (int i = 0; i < len-1; i++)
+    {
+        for(int j=0;j<len-i-1;j++)
+        {
+            if(src[j]>src[j+1])
+            {
+                swap(src[j],src[j+1]);
+            }
+        }
+    }
+    return src[len-1];
+}
+int main()
+{
+    int n[] = {10, 1, 27, 43, 15};
+    cout << "Max: " << average(n, 5) << endl;
+    float f[] = {10.2f, 1.5f, 2.7f, 4.3f, 1.5f};
+    cout << "Max: " << average(f, 5) << endl;
+    double d[] = {10.2, 51.5, 20.7, 40.3, 1.5, -12.6, 5.64};
+    cout << "Max: " << average(d, 7) << endl;
+    return 0;
+}
+实验素材3
+1.template <typename numtype>
+  numtype x, y
+  Compare(numtype a, numtype b)
+  numtype max()
+  numtype min()
+2.将char改为int后，将会输出其对应的ascii码
+3.代码如下
+template <typename numtype>
+numtype Compare<numtype>::max()
+{
+    return (x > y) ? x : y;
+}

@@ -1,0 +1,82 @@
+实验素材1
+1.先基类构造函数，后派生类构造函数。
+2.3个int数据类型，一个占4字节，3个占12字节。
+3.没有区别，两种写法实现同一个目的。
+实验素材2
+1.先是Kid(派生类)析构函数，然后是Person(基类)析构函数。
+2.没有区别，因为这个时候基类Person并没有参数，所以加不加都一样。
+3.正常运行，系统会为Kid类自动生成构造函数和析构函数。
+实验素材3
+1.Matrix operator+(Matrix &c);
+Matrix Matrix::operator+(Matrix &c)
+{
+    Matrix m;
+    for (int i = 0; i < 2; i++)
+        for (int j = 0; j < 3; j++)
+            m.a[i][j] = a[i][j] + c.a[i][j];
+    return m;
+}
+下面的C=A+B使用了上述重载定义。
+2.没有区别，两种写法实现同一个目的，这里把A的参数导入a[i][j]中，B的参数导入c.a[i][j]中。
+3.同上，参数掉个位。
+4.无法运行，系统不知道这样怎么做加法。
+5.把加号改成减号即可实现矩阵A-矩阵B的矩阵减法运算。
+#include <iostream>
+using namespace std;
+class Matrix
+{
+    int a[2][3];
+
+public:
+    Matrix()
+    {
+        for (int i = 0; i < 2; i++)
+            for (int j = 0; j < 3; j++)
+                a[i][j] = 0;
+    };
+    Matrix operator-(Matrix &c);
+    void display();
+    void input();
+};
+void Matrix::input()
+{
+    for (int i = 0; i < 2; i++)
+        for (int j = 0; j < 3; j++)
+            cin >> a[i][j];
+}
+void Matrix::display()
+{
+    for (int i = 0; i < 2; i++)
+    {
+        for (int j = 0; j < 3; j++)
+            cout << a[i][j] << " ";
+        cout << endl;
+    }
+    cout << endl;
+}
+Matrix Matrix::operator-(Matrix &c)
+{
+    Matrix m;
+    for (int i = 0; i < 2; i++)
+        for (int j = 0; j < 3; j++)
+            m.a[i][j] = a[i][j] - c.a[i][j];
+    return m;
+}
+int main()
+{
+    Matrix A, B, C;
+    cout << "请输入2*3矩阵A:" << endl;
+    A.input();
+    cout << endl;
+    cout << "请输入2*3矩阵B:" << endl;
+    B.input();
+    cout << endl;
+    cout << "A=" << endl;
+    A.display();
+    cout << "B=" << endl;
+    B.display();
+    C=A-B;
+    cout << "A-B=" << endl;
+    C.display();
+    return 0;
+}
