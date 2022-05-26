@@ -10,7 +10,7 @@ public:
 };
 class RNA //存储检测信息
 {
-    
+
 public:
     string location;
     string time;
@@ -231,19 +231,26 @@ void output() //输出所有数据
 void write()
 {
     RNA t;
-    char read[20];
-    t.test.name = test1[0].test.name;
     FILE *fp;
-    fp = fopen("test.dat", "w+");
-    fwrite(&t, sizeof(RNA), 1, fp);
-    fread(read, sizeof(RNA), 1, fp);
-    cout << read << endl;
+    fp = fopen("test.dat", "w");
+    for (int n = 0; n < test1.size(); n++)
+        fwrite(&test1[n], sizeof(RNA), test1.size(), fp);
+    fclose(fp);
+}
+void read()
+{
+    RNA a;
+    FILE *fp;
+    fp = fopen("test.dat", "a");
+    fread(&a, sizeof(RNA), 4, fp);
+    test1.push_back(a);
     fclose(fp);
 }
 int main()
 {
 
-    int n = 0;
+    int n;
+    read();
     n = menu();
     if (n == 0)
     {
