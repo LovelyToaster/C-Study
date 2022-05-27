@@ -1,6 +1,7 @@
 #include <bits/stdc++.h>
 #include <vector>
 #include <string>
+#include <fstream>
 using namespace std;
 class people //存储人信息
 {
@@ -40,10 +41,8 @@ int menu()         //程序主界面
     {
         cout << "请输入对应的序号: ";
         cin >> n;
-        if (n == 1 || n == 2 || n == 3 || n == 4)
+        if (n == 0 || n == 1 || n == 2 || n == 3 || n == 4)
             break;
-        else if (n == 0)
-            return 0;
         else
         {
             cout << "没有该操作，请重新输入" << endl;
@@ -144,7 +143,7 @@ void search() //数据查询功能
     cout << endl;
     cout << "                                    核酸检测管理系统                                    " << endl;
     cout << endl;
-    cout << "                   1.按姓名查找                             2.按身份证查找              " << endl;
+    cout << "                   1.按姓名查找                             2.按身份证查找               " << endl;
     cout << endl;
     cout << "=======================================================================================" << endl;
     cout << "请输入对应的序号: ";
@@ -228,23 +227,41 @@ void output() //输出所有数据
     cout << "输出完毕，共" << test1.size() << "条数据" << endl;
     back();
 }
-void write()
+void write() //数据写入文件
 {
-    RNA t;
-    FILE *fp;
-    fp = fopen("test.dat", "w");
+    fstream outfile;
+    outfile.open("test.dat", ios::binary | ios::app);
+    outfile << test1.size() << endl;
     for (int n = 0; n < test1.size(); n++)
-        fwrite(&test1[n], sizeof(RNA), 6, fp);
-    fclose(fp);
+    {
+        outfile << test1[n].test.name << endl;
+        outfile << test1[n].test.ID << endl;
+        outfile << test1[n].location << endl;
+        outfile << test1[n].time << endl;
+        outfile << test1[n].unit << endl;
+        outfile << test1[n].outcome << endl;
+    }
 }
-void read()
+void read() //数据写入内存
 {
-    RNA a;
-    FILE *fp;
-    fp = fopen("test.dat", "a");
-    fread(&a, sizeof(RNA), 6, fp);
-    test1.push_back(a);
-    fclose(fp);
+    int a;
+    RNA t;
+    fstream putfile;
+    putfile.open("test.dat", ios::binary | ios::in);
+    putfile >> a;
+    for (int n = 0; n < a; n++)
+    {
+        putfile >> t.test.name;
+        putfile >> t.test.ID;
+        putfile >> t.location;
+        putfile >> t.time;
+        putfile >> t.unit;
+        putfile >> t.outcome;
+        test1.push_back(t);
+    }
+}
+void fix() //修改数据并覆盖
+{
 }
 int main()
 {
