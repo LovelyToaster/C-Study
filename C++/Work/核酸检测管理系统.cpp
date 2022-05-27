@@ -234,7 +234,7 @@ void write()
     FILE *fp;
     fp = fopen("test.dat", "w");
     for (int n = 0; n < test1.size(); n++)
-        fwrite(&test1[n], sizeof(RNA), test1.size(), fp);
+        fwrite(&test1[n], sizeof(RNA), 6, fp);
     fclose(fp);
 }
 void read()
@@ -242,7 +242,7 @@ void read()
     RNA a;
     FILE *fp;
     fp = fopen("test.dat", "a");
-    fread(&a, sizeof(RNA), 4, fp);
+    fread(&a, sizeof(RNA), 6, fp);
     test1.push_back(a);
     fclose(fp);
 }
