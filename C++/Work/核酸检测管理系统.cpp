@@ -11,18 +11,23 @@ public:
 };
 class RNA //存储检测信息
 {
-
 public:
     string location;
     string time;
     string unit;
     string outcome;
+    int point;
     people test;
 };
 int main();
 int i = 0;
 vector<RNA> test1; //定义一个vector类，用于方便人数控制
-int menu()         //程序主界面
+void search();
+void change();
+void output();
+void input();
+void write();
+void menu() //程序主界面
 {
     int n;
     system("clear");
@@ -41,25 +46,72 @@ int menu()         //程序主界面
     {
         cout << "请输入对应的序号: ";
         cin >> n;
-        if (n == 0 || n == 1 || n == 2 || n == 3 || n == 4)
-            break;
+        system("clear");
+        if (n == 0)
+        {
+            write();
+            exit(0);
+        }
+        else if (n == 1)
+            input();
+        else if (n == 2)
+            search();
+        else if (n == 3)
+            change();
+        else if (n == 4)
+            output();
         else
         {
             cout << "没有该操作，请重新输入" << endl;
             continue;
         }
     }
-    system("clear");
-    return n;
+}
+void write() //数据写入文件
+{
+    ofstream outfile;
+    outfile.open("test.dat", ios::binary | ios::out);
+    outfile << test1.size() << endl;
+    for (int n = 0; n < test1.size(); n++)
+    {
+        outfile << test1[n].test.name << endl;
+        outfile << test1[n].test.ID << endl;
+        outfile << test1[n].location << endl;
+        outfile << test1[n].time << endl;
+        outfile << test1[n].unit << endl;
+        outfile << test1[n].outcome << endl;
+    }
+}
+void read() //数据写入内存
+{
+    int a;
+    RNA t;
+    ifstream putfile;
+    putfile.open("test.dat", ios::binary | ios::in);
+    putfile >> a;
+
+    for (int n = 0; n < a; n++)
+    {
+        putfile >> t.test.name;
+        putfile >> t.test.ID;
+        putfile >> t.location;
+        putfile >> t.time;
+        putfile >> t.unit;
+        putfile >> t.outcome;
+        test1.push_back(t);
+    }
 }
 void back()
 {
     cout << "输入0返回系统主界面(输入其他任意值则结束程序): ";
     cin >> i;
     if (i == 0)
-        main();
+        menu();
     else
+    {
+        write();
         exit(0);
+    }
 }
 void input() //数据录入
 {
@@ -95,6 +147,7 @@ void input() //数据录入
 void search1() //姓名查找
 {
     string t1, t2;
+    int i1 = 0;
     cout << "请输入姓名(可以输入部分)：";
     cin >> t1;
     system("clear");
@@ -103,7 +156,11 @@ void search1() //姓名查找
         t2 = test1[n].test.name;
         if (t2.find(t1) != t2.npos)
         {
-            cout << "姓名  身份证号  检测地点  检测时间  检测单位  检测结果" << endl;
+            if (i1 == 0)
+            {
+                cout << "姓名  身份证号  检测地点  检测时间  检测单位  检测结果" << endl;
+                i1 = 1;
+            }
             cout << test1[n].test.name << "  " << test1[n].test.ID << "  " << test1[n].location << "  " << test1[n].time << "  " << test1[n].unit << "  " << test1[n].outcome << endl;
             i = 1;
         }
@@ -208,7 +265,7 @@ void change() //数据修改
         cout << "输入0返回主菜单，输入任意键继续修改：";
         cin >> i;
         if (i == 0)
-            main();
+            menu();
         else
         {
             system("clear");
@@ -227,59 +284,8 @@ void output() //输出所有数据
     cout << "输出完毕，共" << test1.size() << "条数据" << endl;
     back();
 }
-void write() //数据写入文件
-{
-    fstream outfile;
-    outfile.open("test.dat", ios::binary | ios::app);
-    outfile << test1.size() << endl;
-    for (int n = 0; n < test1.size(); n++)
-    {
-        outfile << test1[n].test.name << endl;
-        outfile << test1[n].test.ID << endl;
-        outfile << test1[n].location << endl;
-        outfile << test1[n].time << endl;
-        outfile << test1[n].unit << endl;
-        outfile << test1[n].outcome << endl;
-    }
-}
-void read() //数据写入内存
-{
-    int a;
-    RNA t;
-    fstream putfile;
-    putfile.open("test.dat", ios::binary | ios::in);
-    putfile >> a;
-    for (int n = 0; n < a; n++)
-    {
-        putfile >> t.test.name;
-        putfile >> t.test.ID;
-        putfile >> t.location;
-        putfile >> t.time;
-        putfile >> t.unit;
-        putfile >> t.outcome;
-        test1.push_back(t);
-    }
-}
-void fix() //修改数据并覆盖
-{
-}
 int main()
 {
-
-    int n;
     read();
-    n = menu();
-    if (n == 0)
-    {
-        write();
-        exit(0);
-    }
-    else if (n == 1)
-        input();
-    else if (n == 2)
-        search();
-    else if (n == 3)
-        change();
-    else if (n == 4)
-        output();
+    menu();
 }
