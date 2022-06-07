@@ -1,36 +1,36 @@
-#include <bits/stdc++.h>
+﻿#include <iostream>
 #include <vector>
 #include <string>
 #include <fstream>
-#include <iomanip>
+#include <iomanip> //setw()
 using namespace std;
-class people //存储人信息
+class people //检测人信息
 {
 public:
-    string name;
-    string ID;
+    string name; //检测人姓名
+    string ID;   //检测人身份证号
 };
 class RNA //存储检测信息
 {
 public:
-    string location;
-    string time;
-    string unit;
-    string outcome;
+    string location; //检测地点
+    string time;     //检测时间
+    string unit;     //检测单位
+    string outcome;  //检测结果
     people test;
 };
 int main();
 int i = 0;
 vector<RNA> test1; //定义一个vector类，用于方便人数控制
-void search();
-void change();
-void output();
-void input();
-void write();
-void menu() //程序主界面
+void search();     //数据查询
+void change();     //数据修改
+void output();     //数据输出
+void input();      //数据输入
+void write();      //数据写入文件
+void menu()        //程序主界面
 {
-    string n;
-    system("clear");
+    int n;
+    system("cls");
     cout << "=======================================================================================" << endl;
     cout << endl;
     cout << "                                    核酸检测管理系统                                    " << endl;
@@ -46,26 +46,51 @@ void menu() //程序主界面
     {
         cout << "请输入对应的序号: ";
         cin >> n;
-        if (n == "0")
+        system("cls");
+        switch (n)
+        {
+        case 0:
+            write();
+            exit(0);
+            cout << "已结束" << endl;
+            break;
+        case 1:
+            input();
+            break;
+        case 2:
+            search();
+            break;
+        case 3:
+            change();
+            break;
+        case 4:
+            output();
+            break;
+        default:
+            cout << "没有该操作，请重新输入" << endl;
+            break;
+        }
+        /*if (n == 0)
         {
             write();
             exit(0);
         }
-        else if (n == "1")
+        else if (n == 1)
             input();
-        else if (n == "2")
+        else if (n == 2)
             search();
-        else if (n == "3")
+        else if (n == 3)
             change();
-        else if (n == "4")
+        else if (n == 4)
             output();
         else
         {
             cout << "没有该操作，请重新输入" << endl;
             continue;
-        }
+        }*/
     }
 }
+
 void write() //数据写入文件
 {
     ofstream outfile;
@@ -88,6 +113,7 @@ void read() //数据写入内存
     ifstream putfile;
     putfile.open("test.dat", ios::binary | ios::in);
     putfile >> a;
+
     for (int n = 0; n < a; n++)
     {
         putfile >> t.test.name;
@@ -99,7 +125,7 @@ void read() //数据写入内存
         test1.push_back(t);
     }
 }
-void back() //返回
+void back()
 {
     cout << "输入0返回系统主界面(输入其他任意值则结束程序): ";
     cin >> i;
@@ -111,24 +137,10 @@ void back() //返回
         exit(0);
     }
 }
-string time() //获取系统时间
+//==================数据录入==================
+void input()
 {
-    time_t nowtime;
-    struct tm *n_t;
-    time(&nowtime);
-    n_t = localtime(&nowtime);
-    char Now_Time[100] = {0};
-    sprintf(Now_Time, "%02d-%02d-%02d_%02d:%02d:%02d", n_t->tm_year + 1900, n_t->tm_mon + 1,
-            n_t->tm_mday, n_t->tm_hour, n_t->tm_min, n_t->tm_sec);
-    string time(Now_Time);
-    return time;
-}
-void input() //数据录入
-{
-    system("clear");
     RNA p;
-    string nowtime;
-    nowtime = time();
     cout << "请输入需要录入的人数：";
     cin >> i;
     for (int n = 0; n < i; n++)
@@ -145,35 +157,35 @@ void input() //数据录入
             {
                 cout << "输入错误! 请重新输入:";
                 cin >> p.test.ID;
-                n1=0;
+                n1 = 0;
             }
         }
         cout << endl
              << "请输入检测地点：";
         cin >> p.location;
         cout << endl
+             << "请输入检测时间：";
+        cin >> p.time;
+        cout << endl
              << "请输入检测单位：";
         cin >> p.unit;
         cout << endl
-             << "请输入检测结果(阴性或阳性)：";
+             << "请输入检测结果：";
         cin >> p.outcome;
-        cout << endl
-             << "检测时间为：" << nowtime;
-        p.time = nowtime;
         test1.push_back(p);
     }
     cout << endl
          << "录入完成！" << endl;
     back();
 }
+//==================数据查询==================
 void search1() //姓名查找
 {
-    system("clear");
     string t1, t2;
     int i1 = 0;
     cout << "请输入姓名(可以输入部分)：";
     cin >> t1;
-    system("clear");
+    system("cls");
     for (int n = 0; n < test1.size(); n++)
     {
         t2 = test1[n].test.name;
@@ -193,14 +205,14 @@ void search1() //姓名查找
         cout << "未查找到相关内容" << endl;
     back();
 }
+
 int search2(int i1) //身份证查找
 {
-    system("clear");
     int n;
     string t1;
     cout << "请输入身份证号：";
     cin >> t1;
-    system("clear");
+    system("cls");
     for (n = 0; n < test1.size(); n++)
     {
         if (t1 == test1[n].test.ID)
@@ -212,158 +224,138 @@ int search2(int i1) //身份证查找
             break;
         }
     }
-    if (i1 == 0)
-    {
-        if (i != 1)
-            cout << "未查找到相关内容" << endl;
-        back();
-    }
-    if (i != 1)
-        n = -1;
-    return n;
-}
-void search3() //核酸检测结果查找
-{
-    system("clear");
-    string i2;
-    int i1 = 0;
-    string t1;
-    cout << "=======================================================================================" << endl;
-    cout << endl;
-    cout << "                                    核酸检测管理系统                                    " << endl;
-    cout << endl;
-    cout << "                              1.阴性               2.阳性                              " << endl;
-    cout << endl;
-    cout << "=======================================================================================" << endl;
-    while (1)
-    {
-        cout << "请输入对应的序号: ";
-        cin >> i2;
-        if (i2 == "1")
-        {
-            t1 = "阴性";
-            break;
-        }
-        else if (i2 == "2")
-        {
-            t1 = "阳性";
-            break;
-        }
-        else
-        {
-            cout << "没有该操作，请重新输入" << endl;
-            continue;
-        }
-    }
-    system("clear");
-    for (int n = 0; n < test1.size(); n++)
-    {
-        if (t1 == test1[n].outcome)
-        {
-            if (i1 == 0)
-            {
-                cout << left;
-                cout << "姓名    身份证号            检测地点    检测时间             检测单位          检测结果" << endl;
-                i1 = 1;
-            }
-            cout << setw(8) << test1[n].test.name << "  " << setw(18) << test1[n].test.ID << "  " << setw(12) << test1[n].location << "  " << setw(19) << test1[n].time << "  " << setw(18) << test1[n].unit << "  " << test1[n].outcome << endl;
-            i = 1;
-        }
-    }
     if (i != 1)
         cout << "未查找到相关内容" << endl;
-    back();
+    if (i1 == 0)
+        back();
+    return n;
 }
 void search() //数据查询功能
 {
-    string n;
-    system("clear");
+    int n;
+    system("cls");
     cout << "=======================================================================================" << endl;
     cout << endl;
     cout << "                                    核酸检测管理系统                                    " << endl;
     cout << endl;
-    cout << "                                      0.返回主界面                                      " << endl;
-    cout << endl;
-    cout << "                   1.按姓名查找      2.按身份证查找    3.按核酸检测结果查询              " << endl;
+    cout << "                   1.按姓名查找                             2.按身份证查找               " << endl;
     cout << endl;
     cout << "=======================================================================================" << endl;
+    cout << "请输入对应的序号: ";
+    cin >> n;
+    system("cls");
     while (1)
     {
-        cout << "请输入对应的序号: ";
-        cin >> n;
-        if (n == "0")
-            menu();
-        else if (n == "1")
+        switch (n)
+        {
+        case 1:
             search1();
-        else if (n == "2")
+            break;
+        case 2:
             search2(0);
-        else if (n == "3")
-            search3();
+            break; //修改
+        default:
+            cout << "没有该操作，请重新输入" << endl;
+            break;
+        }
+        /*if (n == 1)
+            search1();
+
+        else if (n == 2)
+            search2(0);
         else
         {
             cout << "没有该操作，请重新输入" << endl;
             continue;
-        }
+        }*/
     }
 }
+//==================数据修改==================
 void changeout()
 {
     cout << "请输入：";
 }
 void change() //数据修改
 {
-    system("clear");
     int n;
     n = search2(1);
-    if (n >= 0)
+    while (1) //修改
     {
-        while (1)
+        cout << "==========================数据修改============================= " << endl
+             << endl
+             << "1.姓名"
+             << "                 2.身份证号"
+             << "                 3.检测地点" << endl
+             << endl
+             << "             4.检测时间"
+             << "               5.检测单位" << endl
+             << "===============================================================" << endl;
+        cout << "请输入你要修改的内容：";
+        cin >> i;
+        switch (i)
         {
-            cout << "1.姓名" << endl
-                 << "2.身份证号" << endl
-                 << "3.检测地点" << endl
-                 << "4.检测单位" << endl;
-            cout << "请输入你要修改的内容：";
-            cin >> i;
-            if (i == 1)
-            {
-                changeout();
-                cin >> test1[n].test.name;
-            }
-            else if (i == 2)
-            {
-                changeout();
-                cin >> test1[n].test.ID;
-            }
-            else if (i == 3)
-            {
-                changeout();
-                cin >> test1[n].location;
-            }
-            else if (i == 4)
-            {
-                changeout();
-                cin >> test1[n].unit;
-            }
-            cout << "输入0返回主菜单，输入任意键继续修改：";
-            cin >> i;
-            if (i == 0)
-                menu();
-            else
-            {
-                system("clear");
-                cout << left;
-                cout << "姓名    身份证号            检测地点    检测时间             检测单位          检测结果" << endl;
-                cout << setw(8) << test1[n].test.name << "  " << setw(18) << test1[n].test.ID << "  " << setw(12) << test1[n].location << "  " << setw(19) << test1[n].time << "  " << setw(18) << test1[n].unit << "  " << test1[n].outcome << endl;
-            }
+        case 1:
+            changeout();
+            cin >> test1[n].test.name;
+            break;
+        case 2:
+            changeout();
+            cin >> test1[n].test.ID;
+            break;
+        case 3:
+            changeout();
+            cin >> test1[n].location;
+            break;
+        case 4:
+            changeout();
+            cin >> test1[n].time;
+            break;
+        case 5:
+            changeout();
+            cin >> test1[n].unit;
+            break;
+        default:
+            cout << "没有该选项，请重新输入" << endl;
+        }
+        /* if (i == 1)
+        {
+            changeout();
+            cin >> test1[n].test.name;
+        }
+        else if (i == 2)
+        {
+            changeout();
+            cin >> test1[n].test.ID;
+        }
+        else if (i == 3)
+        {
+            changeout();
+            cin >> test1[n].location;
+        }
+        else if (i == 4)
+        {
+            changeout();
+            cin >> test1[n].time;
+        }
+        else if (i == 5)
+        {
+            changeout();
+            cin >> test1[n].unit;
+        }*/
+        cout << "输入0返回主菜单，输入任意键继续修改：";
+        cin >> i;
+        if (i == 0)
+            menu();
+        else
+        {
+            system("cls");
+            cout << left;
+            cout << "姓名    身份证号            检测地点    检测时间             检测单位          检测结果" << endl;
+            cout << setw(8) << test1[n].test.name << "  " << setw(18) << test1[n].test.ID << "  " << setw(12) << test1[n].location << "  " << setw(19) << test1[n].time << "  " << setw(18) << test1[n].unit << "  " << test1[n].outcome << endl;
         }
     }
-    else
-    {
-        cout << "未查找到相关内容" << endl;
-        back();
-    }
 }
+
 void output() //输出所有数据
 {
     system("clear");
