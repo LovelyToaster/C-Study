@@ -12,7 +12,7 @@ class RNA //存储信息
     string outcome;
     string name;
     string ID;
-    vector<RNA> test1; //定义一个vector类，用于方便人数控制
+    vector<RNA> test1; //动态数组，用于方便人数控制
 public:
     void search1();
     int search2(int);
@@ -148,7 +148,7 @@ void RNA::input() //数据录入
             {
                 cout << "输入错误! 请重新输入:";
                 cin >> p.ID;
-                n1=0;
+                n1 = 0;
             }
         }
         cout << endl
