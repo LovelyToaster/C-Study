@@ -1,0 +1,26 @@
+1.数据插入操作
+bool InsertList(SeqList *&L, int i, ElemType e)
+{
+    int j;
+    if (i < 1 || i > L->length + 1 || L->length == MaxSize)
+        return false;
+    i--;
+    for (j = L->length; j > i; j--)
+        L->list[j] = L->list[j - 1];
+    L->list[i] = e;
+    L->length++;
+    return true;
+}
+
+2.数据删除操作
+bool ListDelete(SeqList *&L, int i)
+{
+    int j;
+    if (i < 1 || i > L->length)
+        return false;
+    i--;
+    for (j = i; j < L->length - 1; j++)
+        L->list[j] = L->list[j + 1];
+    L->length--;
+    return true;
+}

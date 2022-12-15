@@ -1,0 +1,28 @@
+1.
+int Search(SSTable ST, KeyType k) //顺序查找算法：返回-1查找失败，否则查找成功并表示查找的位置
+{
+	int i;
+	for (i = 0; i < ST.length; i++)
+	{
+		if (ST.R[i].key == k)
+			return i + 1;
+	}
+	return -1; //查找失败
+}
+2.
+int BinSearch(SSTable ST, KeyType k) //二分查找算法
+{
+	int i = 1, j = ST.length + 1, m;
+	while (i <= j)
+	{
+		printf("%d\n", m);
+		m = (i + j) / 2;
+		if (k == ST.R[m - 1].key)
+			return m;
+		if (k > ST.R[m - 1].key)
+			i = m + 1;
+		else
+			j = m - 1;
+	}
+	return -1; /*   查找失败  */
+}

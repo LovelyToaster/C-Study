@@ -1,0 +1,22 @@
+1.出队列功能
+int DeQueue(SqQueue *&q, QElemType &e) //出队列
+{
+	if (q->front == q->rear)
+		return false;
+	q->front++;
+	e = q->data[q->front];
+	return true;
+}
+2.获取队首元素值
+bool GetHead(SqQueue *&q, QElemType &e) //获取首列元素
+{
+	if (q->front == q->rear)
+		return false;
+	e = q->data[q->front + 1];
+	return true;
+}
+3.计算队列长度
+int QueueLength(SqQueue *q) //队列长度
+{
+	return q->rear - q->front;
+}
