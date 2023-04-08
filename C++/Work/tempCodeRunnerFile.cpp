@@ -1,1 +1,0 @@
-(LinkNode *)malloc(sizeof(LinkNode))

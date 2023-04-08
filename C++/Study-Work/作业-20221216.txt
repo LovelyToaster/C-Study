@@ -1,0 +1,56 @@
+1.
+//折半插入排序算法，并输出每趟排序后数据的顺序
+void Binary_Insert_Sort(Sqlist L)
+{
+    int i, j, low, high, m;
+    RecType temp;
+    for (i = 1; i < L.length; i++)
+    {
+        temp = L.R[i];
+        low = 0;
+        high = i - 1;
+        while (low <= high)
+        {
+            m = (low + high) / 2;
+            if (temp.key < L.R[m].key)
+                high = m - 1;
+            else
+                low = m + 1;
+        }
+        for (j = i - 1; j >= high + 1; j--)
+            L.R[j + 1] = L.R[j];
+        L.R[high + 1] = temp;
+        printf("\n第%d次排序为：", i);
+        for (j = 0; j < L.length; j++)
+        {
+            printf("  %d", L.R[j].key);
+        }
+        printf("\n");
+    }
+}
+
+2.
+//冒泡排序算法，并输出每趟排序后数据的顺序
+void Bubble_Sort(Sqlist L)
+{
+    int i, j, x;
+    RecType p;
+    for (i = 0; i < L.length - 1; i++)
+    {
+        for (j = 1; j < L.length - i; j++)
+        {
+            if (L.R[j].key < L.R[j - 1].key)
+            { 
+                p = L.R[j];
+                L.R[j] = L.R[j - 1];
+                L.R[j - 1] = p;
+                printf("\n第%d次排序为：", i);
+                for (j = 0; j < L.length; j++)
+                {
+                    printf("  %d", L.R[j].key);
+                }
+                printf("\n");
+            }
+        }
+    }
+}
