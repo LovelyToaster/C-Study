@@ -1,0 +1,37 @@
+{
+    "files.associations": {
+        "typeindex": "cpp",
+        "typeinfo": "cpp",
+        "ostream": "cpp",
+        "any": "cpp",
+        "array": "cpp",
+        "*.tcc": "cpp",
+        "forward_list": "cpp",
+        "string": "cpp",
+        "unordered_map": "cpp",
+        "unordered_set": "cpp",
+        "memory": "cpp",
+        "optional": "cpp",
+        "string_view": "cpp",
+        "fstream": "cpp",
+        "future": "cpp",
+        "istream": "cpp",
+        "shared_mutex": "cpp",
+        "sstream": "cpp",
+        "stop_token": "cpp",
+        "streambuf": "cpp",
+        "thread": "cpp",
+        "functional": "cpp",
+        "regex": "cpp",
+        "tuple": "cpp",
+        "valarray": "cpp",
+        "variant": "cpp",
+        "iostream": "cpp",
+        "iomanip": "cpp",
+        "iosfwd": "cpp"
+    },
+    "editor.codeActionsOnSave": {},
+    "java.project.sourcePaths": [
+        "Java/Homework"
+    ]
+}
