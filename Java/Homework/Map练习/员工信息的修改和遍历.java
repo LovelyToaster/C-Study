@@ -1,47 +1,33 @@
 package Map练习;
 
-import java.util.HashMap;
-import java.util.Scanner;
-import java.util.Set;
+import java.util.*;
 
 public class 员工信息的修改和遍历 {
     public static void main(String[] args) {
-        HashMap<String, Integer> map = new HashMap<String, Integer>();
-        String s;
-        String s3;
-        Scanner sc = new Scanner(System.in);
-        s = sc.nextLine();
-        char[] ch = s.toCharArray();
-        int j = 0;
-        int i2 = 0;
-        for (int i = 0; i < ch.length; i++) {
-            s = null;
-            if (ch[i] != ' ' && ch[i] > 'a' && ch[i] < 'z') {
-                s += String.valueOf(ch[i]);
-            }
-            s3 = s;
-            if (ch[i] != ' ' && ch[i] > '0' && ch[i] < '9') {
-                s += String.valueOf(ch[i]);
-                i2 = Integer.valueOf(s);
-            }
-            if (j == 0) {
-                map.put(s, 0);
-                j = 1;
-            }
-            if (j == 1) {
-                map.put(s3, i2);
-            }
+        Scanner scanner = new Scanner(System.in);
 
+        // 实例化Map对象m
+        Map<String, Integer> m = new HashMap<>();
+
+        // 添加员工信息
+        for (int i = 0; i < 3; i++) {
+            String name = scanner.next();
+            int salary = scanner.nextInt();
+            m.put(name, salary);
         }
-        Set<String> s1 = map.keySet();
-        for (String s2 : s1) {
-            map.put(s2, map.get(s2) + 100);
+
+        // 将jack的工资更改为2600元
+        m.put("jack", 2600);
+
+        // 为所有的员工工资加薪100元
+        for (String key : m.keySet()) {
+            int salary = m.get(key);
+            m.put(key, salary + 100);
         }
-        for (String s2 : s1) {
-            System.out.print(s2);
-            System.out.print("--");
-            System.out.println(map.get(s2));
+
+        // 遍历集合中所有的员工
+        for (String key : m.keySet()) {
+            System.out.println(key + "--" + m.get(key));
         }
     }
-
 }
