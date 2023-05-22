@@ -5,13 +5,19 @@ import java.util.Scanner;
 
 public class 异常处理 {
     public static void main(String[] args) {
-        int i;
+        int i = 0;
+        String str = null;
         Scanner sc = new Scanner(System.in);
         while (true) {
+            System.out.println("Please enter an integer:");
+            str = null;
             try {
-                i = sc.nextInt();
-            } catch (InputMismatchException e) {
-                System.out.println("X 重试");
+                str = sc.next();
+                i = Integer.parseInt(str);
+                System.out.println("Program terminated normally");
+                break;
+            } catch (NumberFormatException e) {
+                System.out.println("The value you entered is:" + str);
             }
         }
     }
