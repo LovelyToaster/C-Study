@@ -32,6 +32,7 @@
     },
     "editor.codeActionsOnSave": {},
     "java.project.sourcePaths": [
-        "Java/Homework"
+        "Java/Homework",
+        "Java/Work"
     ]
 }
