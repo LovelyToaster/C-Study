@@ -32,7 +32,14 @@ public class Gui {
                 String frame_name = accountTextField.getText();
                 String frame_password = String.valueOf(passwordField.getPassword());
                 try {
-                    login.password_verify(frame_name, frame_password);
+                    int i = login.password_verify(frame_name, frame_password);
+                    if (i == 0) {
+                        JOptionPane.showMessageDialog(frame, "登录成功");
+                    } else if (i == 2) {
+                        JOptionPane.showMessageDialog(frame, "请输入用户名");
+                    } else {
+                        JOptionPane.showMessageDialog(frame, "用户名或密码错误");
+                    }
                 } catch (IOException | ClassNotFoundException ex) {
                     throw new RuntimeException(ex);
                 }
@@ -45,7 +52,14 @@ public class Gui {
                 String frame_new_name = accountTextField.getText();
                 String frame_new_password = String.valueOf(passwordField.getPassword());
                 try {
-                    login.user_register(frame_new_name, frame_new_password);
+                    int i = login.user_register(frame_new_name, frame_new_password);
+                    if (i == 0) {
+                        JOptionPane.showMessageDialog(frame, "注册成功");
+                    } else if (i == 1) {
+                        JOptionPane.showMessageDialog(frame, "请输入用户名或密码");
+                    } else {
+                        JOptionPane.showMessageDialog(frame, "用户名重复");
+                    }
                 } catch (IOException ex) {
                     throw new RuntimeException(ex);
                 }
