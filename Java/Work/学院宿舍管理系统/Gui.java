@@ -4,12 +4,12 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.io.IOException;
 
 public class Gui {
-    Login login = new Login();
-
-    public void Login_Frame() {
+    public void Login_Frame(Student stu) {
         JFrame frame = new JFrame("登录窗口");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(300, 200);
@@ -29,12 +29,15 @@ public class Gui {
         JButton loginButton = new JButton("登录");
         loginButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+                Login login = new Login();
                 String frame_name = accountTextField.getText();
                 String frame_password = String.valueOf(passwordField.getPassword());
                 try {
                     int i = login.password_verify(frame_name, frame_password);
                     if (i == 0) {
                         JOptionPane.showMessageDialog(frame, "登录成功");
+                        frame.dispose();
+                        Main_Frame(stu);
                     } else if (i == 2) {
                         JOptionPane.showMessageDialog(frame, "请输入用户名");
                     } else {
@@ -49,6 +52,7 @@ public class Gui {
         JButton registerButton = new JButton("注册");
         registerButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+                Login login = new Login();
                 String frame_new_name = accountTextField.getText();
                 String frame_new_password = String.valueOf(passwordField.getPassword());
                 try {
@@ -105,4 +109,173 @@ public class Gui {
         frame.setVisible(true);
 
     }
+
+    public void Main_Frame(Student stu) {
+        // 创建主窗口
+        JFrame frame = new JFrame("学生宿舍信息管理系统");
+        frame.setSize(500, 400);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setLayout(new BorderLayout());
+        frame.setLocationRelativeTo(null);
+
+        // 创建面板
+        JPanel panel = new JPanel();
+        panel.setLayout(new GridLayout(5, 1));
+        panel.setBackground(new Color(135, 206, 235));
+
+        // 创建标题标签
+        JLabel titleLabel = new JLabel("欢迎使用学生宿舍信息管理系统", SwingConstants.CENTER);
+        titleLabel.setFont(new Font("宋体", Font.BOLD, 25));
+        titleLabel.setForeground(Color.WHITE);
+
+        // 创建按钮
+        JButton addButton = new JButton("添加学生信息");
+        addButton.setBackground(new Color(70, 130, 180));
+        addButton.setFont(new Font("宋体", Font.BOLD, 20));
+        addButton.setForeground(Color.WHITE);
+        addButton.setFocusPainted(false);
+        addButton.setBorderPainted(false);
+
+        JButton searchButton = new JButton("搜索学生信息");
+        searchButton.setBackground(new Color(70, 130, 180));
+        searchButton.setFont(new Font("宋体", Font.BOLD, 20));
+        searchButton.setForeground(Color.WHITE);
+        searchButton.setFocusPainted(false);
+        searchButton.setBorderPainted(false);
+
+        JButton viewButton = new JButton("查看学生信息");
+        viewButton.setBackground(new Color(70, 130, 180));
+        viewButton.setFont(new Font("宋体", Font.BOLD, 20));
+        viewButton.setForeground(Color.WHITE);
+        viewButton.setFocusPainted(false);
+        viewButton.setBorderPainted(false);
+
+        JButton deleteButton = new JButton("删除学生信息");
+        deleteButton.setBackground(new Color(70, 130, 180));
+        deleteButton.setFont(new Font("宋体", Font.BOLD, 20));
+        deleteButton.setForeground(Color.WHITE);
+        deleteButton.setFocusPainted(false);
+        deleteButton.setBorderPainted(false);
+
+        // 添加按钮点击事件监听器
+        addButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                // 处理添加学生信息的逻辑
+                // TODO
+            }
+        });
+
+        searchButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                // 处理搜索学生信息的逻辑
+                // TODO
+            }
+        });
+
+        viewButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                frame.dispose();
+                View_Frame(stu);
+            }
+        });
+
+        deleteButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                // 处理删除学生信息的逻辑
+                // TODO
+            }
+        });
+
+        // 将组件添加到面板中
+        panel.add(titleLabel);
+        panel.add(addButton);
+        panel.add(searchButton);
+        panel.add(viewButton);
+        panel.add(deleteButton);
+
+        // 将面板添加到主窗口中
+        frame.add(panel, BorderLayout.CENTER);
+
+        // 显示主窗口
+        frame.setVisible(true);
+    }
+    public void Search_Frame(){
+
+    }
+    public void View_Frame(Student stu){
+        // 创建主窗口
+        JFrame frame = new JFrame("学生宿舍信息管理系统");
+        frame.setSize(600, 600);
+        frame.setLayout(new BorderLayout());
+        frame.setLocationRelativeTo(null);
+
+        // 创建面板
+        JPanel panel = new JPanel();
+        panel.setLayout(new BorderLayout());
+        panel.setBackground(new Color(135, 206, 235));
+
+        // 创建标题标签
+        JLabel titleLabel = new JLabel("所有的学生宿舍信息", SwingConstants.CENTER);
+        titleLabel.setFont(new Font("宋体", Font.BOLD, 30));
+        titleLabel.setForeground(Color.WHITE);
+
+        // 创建文本区域
+        JTextArea studentInfoTextArea = new JTextArea();
+        studentInfoTextArea.setEditable(false);
+        studentInfoTextArea.setLineWrap(true);
+        studentInfoTextArea.setFont(new Font("宋体", Font.PLAIN, 14));
+        studentInfoTextArea.append(stu.get_student());
+
+        // 创建滚动面板
+        JScrollPane scrollPane = new JScrollPane(studentInfoTextArea);
+
+        // 将组件添加到面板中
+        panel.add(titleLabel, BorderLayout.PAGE_START);
+        panel.add(scrollPane, BorderLayout.CENTER);
+
+        // 将面板添加到主窗口中
+        frame.add(panel, BorderLayout.CENTER);
+
+        // 显示主窗口
+        frame.setVisible(true);
+
+        frame.addWindowListener(new WindowListener() {
+            @Override
+            public void windowOpened(WindowEvent e) {
+
+            }
+
+            @Override
+            public void windowClosing(WindowEvent e) {
+                frame.dispose();
+                Main_Frame(stu);
+            }
+
+            public void windowClosed(WindowEvent e) {
+
+            }
+
+            @Override
+            public void windowIconified(WindowEvent e) {
+
+            }
+
+            @Override
+            public void windowDeiconified(WindowEvent e) {
+
+            }
+
+            @Override
+            public void windowActivated(WindowEvent e) {
+
+            }
+
+            @Override
+            public void windowDeactivated(WindowEvent e) {
+
+            }
+
+        });
+    }
 }
+

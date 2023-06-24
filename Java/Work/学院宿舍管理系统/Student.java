@@ -1,5 +1,6 @@
 package 学院宿舍管理系统;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Student {
@@ -10,35 +11,42 @@ public class Student {
     String dormitory;
     int dormitory_number;
     int phone;
+    ArrayList<Student> student_manage = new ArrayList<>();
 
-    Student addstudent() { //添加学生
-        Student stu = new Student();
+
+    public void add_student() { // 添加学生
         Scanner sc = new Scanner(System.in);
         System.out.println("输入学号：");
-        stu.no = sc.nextInt();
+        this.no = sc.nextInt();
         System.out.println("输入姓名：");
-        stu.name = sc.next();
+        this.name = sc.next();
         System.out.println("输入性别：");
-        stu.sex = sc.next();
+        this.sex = sc.next();
         System.out.println("输入院部：");
-        stu.institute = sc.next();
+        this.institute = sc.next();
         System.out.println("输入宿舍楼：");
-        stu.dormitory = sc.next();
+        this.dormitory = sc.next();
         System.out.println("输入宿舍号：");
-        stu.dormitory_number = sc.nextInt();
+        this.dormitory_number = sc.nextInt();
         System.out.println("输入电话：");
-        stu.phone = sc.nextInt();
+        this.phone = sc.nextInt();
+        student_manage.add(this);
+    }
+
+    public String get_student() { // 获取学生信息
+        String stu=null;
+        for(Student s:student_manage){
+            stu=s.dormitory+" "+s.sex;
+        }
         return stu;
     }
 
-    public void getstudent() { //获取学生信息
-        System.out.println(
-                no + " " + name + " " + sex + " " + institute + " " + dormitory + " " + dormitory_number + " " + phone);
-    }
-    public void sreachstudent() { //查找学生信息
+    public void search_student() { // 查找学生信息
 
     }
-    public void modifystudent(){ //修改学生信息
+
+    public void modify_student() { // 修改学生信息
 
     }
+
 }
