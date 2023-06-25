@@ -1,6 +1,7 @@
 package 学院宿舍管理系统;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -113,14 +114,14 @@ public class Gui {
     public void Main_Frame(Student stu) {
         // 创建主窗口
         JFrame frame = new JFrame("学生宿舍信息管理系统");
-        frame.setSize(500, 400);
+        frame.setSize(500, 600);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLayout(new BorderLayout());
         frame.setLocationRelativeTo(null);
 
         // 创建面板
         JPanel panel = new JPanel();
-        panel.setLayout(new GridLayout(5, 1));
+        panel.setLayout(new GridLayout(4, 1));
         panel.setBackground(new Color(135, 206, 235));
 
         // 创建标题标签
@@ -136,12 +137,12 @@ public class Gui {
         addButton.setFocusPainted(false);
         addButton.setBorderPainted(false);
 
-        JButton searchButton = new JButton("搜索学生信息");
-        searchButton.setBackground(new Color(70, 130, 180));
-        searchButton.setFont(new Font("宋体", Font.BOLD, 20));
-        searchButton.setForeground(Color.WHITE);
-        searchButton.setFocusPainted(false);
-        searchButton.setBorderPainted(false);
+        JButton managementButton = new JButton("管理学生信息");
+        managementButton.setBackground(new Color(70, 130, 180));
+        managementButton.setFont(new Font("宋体", Font.BOLD, 20));
+        managementButton.setForeground(Color.WHITE);
+        managementButton.setFocusPainted(false);
+        managementButton.setBorderPainted(false);
 
         JButton viewButton = new JButton("查看学生信息");
         viewButton.setBackground(new Color(70, 130, 180));
@@ -149,13 +150,6 @@ public class Gui {
         viewButton.setForeground(Color.WHITE);
         viewButton.setFocusPainted(false);
         viewButton.setBorderPainted(false);
-
-        JButton deleteButton = new JButton("删除学生信息");
-        deleteButton.setBackground(new Color(70, 130, 180));
-        deleteButton.setFont(new Font("宋体", Font.BOLD, 20));
-        deleteButton.setForeground(Color.WHITE);
-        deleteButton.setFocusPainted(false);
-        deleteButton.setBorderPainted(false);
 
         // 添加按钮点击事件监听器
         addButton.addActionListener(new ActionListener() {
@@ -165,7 +159,7 @@ public class Gui {
             }
         });
 
-        searchButton.addActionListener(new ActionListener() {
+        managementButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 // 处理搜索学生信息的逻辑
                 // TODO
@@ -179,19 +173,11 @@ public class Gui {
             }
         });
 
-        deleteButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                // 处理删除学生信息的逻辑
-                // TODO
-            }
-        });
-
         // 将组件添加到面板中
         panel.add(titleLabel);
         panel.add(addButton);
-        panel.add(searchButton);
+        panel.add(managementButton);
         panel.add(viewButton);
-        panel.add(deleteButton);
 
         // 将面板添加到主窗口中
         frame.add(panel, BorderLayout.CENTER);
@@ -199,15 +185,31 @@ public class Gui {
         // 显示主窗口
         frame.setVisible(true);
     }
-    public void Search_Frame(){
+
+    public void Management_Frame() {
 
     }
-    public void View_Frame(Student stu){
+
+    public void View_Frame(Student stu) {
         // 创建主窗口
         JFrame frame = new JFrame("学生宿舍信息管理系统");
         frame.setSize(600, 600);
         frame.setLayout(new BorderLayout());
         frame.setLocationRelativeTo(null);
+
+        // 创建显示区域
+        String[] columnNames = { "学号", "姓名", "性别", "院部", "宿舍楼", "宿舍号", "电话" };
+        JTable table = new JTable() {
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+        table.getTableHeader().setReorderingAllowed(false);
+        DefaultTableModel stu_view = (DefaultTableModel) table.getModel();
+        stu_view.setColumnIdentifiers(columnNames);
+        for (Student s : stu.student_manage) {
+            stu_view.addRow(stu.get_student(s));
+        }
 
         // 创建面板
         JPanel panel = new JPanel();
@@ -219,15 +221,9 @@ public class Gui {
         titleLabel.setFont(new Font("宋体", Font.BOLD, 30));
         titleLabel.setForeground(Color.WHITE);
 
-        // 创建文本区域
-        JTextArea studentInfoTextArea = new JTextArea();
-        studentInfoTextArea.setEditable(false);
-        studentInfoTextArea.setLineWrap(true);
-        studentInfoTextArea.setFont(new Font("宋体", Font.PLAIN, 14));
-        studentInfoTextArea.append(stu.get_student());
-
         // 创建滚动面板
-        JScrollPane scrollPane = new JScrollPane(studentInfoTextArea);
+        JScrollPane scrollPane = new JScrollPane();
+        scrollPane.setViewportView(table);
 
         // 将组件添加到面板中
         panel.add(titleLabel, BorderLayout.PAGE_START);
@@ -278,4 +274,3 @@ public class Gui {
         });
     }
 }
-
