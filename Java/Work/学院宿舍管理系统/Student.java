@@ -1,43 +1,30 @@
 package 学院宿舍管理系统;
 
+import java.io.*;
 import java.util.ArrayList;
-import java.util.Scanner;
 
 public class Student {
-    int no;
+    String no;
     String name;
     String sex;
     String institute;
     String dormitory;
-    int dormitory_number;
-    int phone;
+    String dormitory_number;
+    String phone;
     ArrayList<Student> student_manage = new ArrayList<>();
 
-
-    public void add_student() { // 添加学生
-        Student stu=new Student();
-        Scanner sc = new Scanner(System.in);
-        System.out.println("输入学号：");
-        stu.no = sc.nextInt();
-        System.out.println("输入姓名：");
-        stu.name = sc.next();
-        System.out.println("输入性别：");
-        stu.sex = sc.next();
-        System.out.println("输入院部：");
-        stu.institute = sc.next();
-        System.out.println("输入宿舍楼：");
-        stu.dormitory = sc.next();
-        System.out.println("输入宿舍号：");
-        stu.dormitory_number = sc.nextInt();
-        System.out.println("输入电话：");
-        stu.phone = sc.nextInt();
+    public int add_student(Student stu) { // 添加学生
         student_manage.add(stu);
+        try {
+            student_in();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return 0;
     }
 
     public Object[] get_student(Student s) { // 获取学生信息
-        Object[] stu_data = new Object[0];
-        stu_data = new Object[]{s.no, s.name, s.sex, s.institute, s.dormitory, s.dormitory_number, s.phone};
-        return stu_data;
+        return new Object[] { s.no, s.name, s.sex, s.institute, s.dormitory, s.dormitory_number, s.phone };
     }
 
     public void search_student() { // 查找学生信息
@@ -45,6 +32,55 @@ public class Student {
     }
 
     public void modify_student() { // 修改学生信息
+
+    }
+
+    public void student_in() throws IOException { // 学生写入文件
+        BufferedWriter bw = new BufferedWriter(new FileWriter("student"));
+        for (Student s : student_manage) {
+            bw.write(s.no);
+            bw.newLine();
+            bw.write(s.name);
+            bw.newLine();
+            bw.write(s.sex);
+            bw.newLine();
+            bw.write(s.institute);
+            bw.newLine();
+            bw.write(s.dormitory);
+            bw.newLine();
+            bw.write(s.dormitory_number);
+            bw.newLine();
+            bw.write(s.phone);
+            bw.newLine();
+        }
+        bw.close();
+    }
+
+    public void student_out() throws IOException { // 学生写出文件
+        File file = new File("student");
+        if (!file.exists()) {
+            file.createNewFile();
+        }
+        BufferedReader br = new BufferedReader(new FileReader("student"));
+        String str;
+        while ((str = br.readLine()) != null) {
+            Student stu = new Student();
+            stu.no = str;
+            str = br.readLine();
+            stu.name = str;
+            str = br.readLine();
+            stu.sex = str;
+            str = br.readLine();
+            stu.institute = str;
+            str = br.readLine();
+            stu.dormitory = str;
+            str = br.readLine();
+            stu.dormitory_number = str;
+            str = br.readLine();
+            stu.phone = str;
+            student_manage.add(stu);
+        }
+        br.close();
 
     }
 

@@ -10,7 +10,9 @@ import java.awt.event.WindowListener;
 import java.io.IOException;
 
 public class Gui {
-    public void Login_Frame(Student stu) {
+    public void Login_Frame(Student stu) throws IOException, ClassNotFoundException {
+        Login login = new Login();
+        login.user_out();
         JFrame frame = new JFrame("登录窗口");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(300, 200);
@@ -30,7 +32,6 @@ public class Gui {
         JButton loginButton = new JButton("登录");
         loginButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                Login login = new Login();
                 String frame_name = accountTextField.getText();
                 String frame_password = String.valueOf(passwordField.getPassword());
                 try {
@@ -53,7 +54,6 @@ public class Gui {
         JButton registerButton = new JButton("注册");
         registerButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                Login login = new Login();
                 String frame_new_name = accountTextField.getText();
                 String frame_new_password = String.valueOf(passwordField.getPassword());
                 try {
@@ -154,8 +154,8 @@ public class Gui {
         // 添加按钮点击事件监听器
         addButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                // 处理添加学生信息的逻辑
-                // TODO
+                frame.dispose();
+                Add_Frame(stu);
             }
         });
 
@@ -184,6 +184,150 @@ public class Gui {
 
         // 显示主窗口
         frame.setVisible(true);
+    }
+
+    public void Add_Frame(Student stu) {
+        // 创建主窗口
+        JFrame frame = new JFrame("学生宿舍信息管理系统");
+        frame.setSize(500, 500);
+        frame.setLayout(new BorderLayout());
+        frame.setLocationRelativeTo(null);
+
+        // 创建面板
+        JPanel panel = new JPanel();
+        panel.setLayout(new BorderLayout());
+        panel.setBackground(new Color(135, 206, 235));
+
+        // 创建标题标签
+        JLabel titleLabel = new JLabel("添加学生信息", SwingConstants.CENTER);
+        titleLabel.setFont(new Font("宋体", Font.BOLD, 30));
+        titleLabel.setForeground(Color.WHITE);
+
+        // 创建输入框和标签
+        JPanel inputPanel_lable = new JPanel();
+        inputPanel_lable.setLayout(new GridLayout(10, 2));
+        inputPanel_lable.setBackground(new Color(135, 206, 235));
+
+        JPanel inputPanel_text = new JPanel();
+        inputPanel_text.setLayout(new GridLayout(10, 2));
+        inputPanel_text.setBackground(new Color(135, 206, 235));
+
+        JLabel noLabel = new JLabel("学号：");
+        JLabel nameLabel = new JLabel("姓名：");
+        JLabel sexLabel = new JLabel("性别：");
+        JLabel instituteLabel = new JLabel("院部：");
+        JLabel dormitoryLabel = new JLabel("宿舍楼：");
+        JLabel dormitory_numberLabel = new JLabel("宿舍号：");
+        JLabel phoneLabel = new JLabel("电话：");
+
+        noLabel.setFont(new Font("宋体", Font.BOLD, 20));
+        nameLabel.setFont(new Font("宋体", Font.BOLD, 20));
+        sexLabel.setFont(new Font("宋体", Font.BOLD, 20));
+        instituteLabel.setFont(new Font("宋体", Font.BOLD, 20));
+        dormitoryLabel.setFont(new Font("宋体", Font.BOLD, 20));
+        dormitory_numberLabel.setFont(new Font("宋体", Font.BOLD, 20));
+        phoneLabel.setFont(new Font("宋体", Font.BOLD, 20));
+
+        JTextField noTextField = new JTextField();
+        JTextField nameTextField = new JTextField();
+        JTextField sexTextField = new JTextField();
+        JTextField instituteTextField = new JTextField();
+        JTextField dormitoryTextField = new JTextField();
+        JTextField dormitory_numberTextField = new JTextField();
+        JTextField phoneTextField = new JTextField();
+
+        inputPanel_lable.add(noLabel);
+        inputPanel_text.add(noTextField);
+        inputPanel_lable.add(nameLabel);
+        inputPanel_text.add(nameTextField);
+        inputPanel_lable.add(sexLabel);
+        inputPanel_text.add(sexTextField);
+        inputPanel_lable.add(instituteLabel);
+        inputPanel_text.add(instituteTextField);
+        inputPanel_lable.add(dormitoryLabel);
+        inputPanel_text.add(dormitoryTextField);
+        inputPanel_lable.add(dormitory_numberLabel);
+        inputPanel_text.add(dormitory_numberTextField);
+        inputPanel_lable.add(phoneLabel);
+        inputPanel_text.add(phoneTextField);
+
+        // 创建添加按钮
+        JButton addButton = new JButton("添加");
+        addButton.setBackground(new Color(70, 130, 180));
+        addButton.setForeground(Color.WHITE);
+        addButton.setFocusPainted(false);
+        addButton.setBorderPainted(false);
+
+        // 添加按钮点击事件监听器
+        addButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                Student stu_data = new Student();
+                stu_data.no = noTextField.getText();
+                stu_data.name = nameTextField.getText();
+                stu_data.sex = sexTextField.getText();
+                stu_data.institute = instituteTextField.getText();
+                stu_data.dormitory = dormitoryTextField.getText();
+                stu_data.dormitory_number = dormitory_numberTextField.getText();
+                stu_data.phone = phoneTextField.getText();
+                int i = stu.add_student(stu_data);
+                if (i == 0) {
+                    JOptionPane.showMessageDialog(frame, "添加成功！");
+                } else {
+                    JOptionPane.showMessageDialog(frame, "添加失败！");
+                }
+                frame.dispose();
+                Main_Frame(stu);
+            }
+        });
+
+        // 将组件添加到面板中
+        panel.add(titleLabel, BorderLayout.NORTH);
+        panel.add(inputPanel_lable, BorderLayout.LINE_START);
+        panel.add(inputPanel_text, BorderLayout.CENTER);
+        panel.add(addButton, BorderLayout.SOUTH);
+
+        // 将面板添加到主窗口中
+        frame.add(panel, BorderLayout.CENTER);
+
+        // 显示主窗口
+        frame.setVisible(true);
+        frame.addWindowListener(new WindowListener() {
+            @Override
+            public void windowOpened(WindowEvent e) {
+
+            }
+
+            @Override
+            public void windowClosing(WindowEvent e) {
+                frame.dispose();
+                Main_Frame(stu);
+            }
+
+            @Override
+            public void windowClosed(WindowEvent e) {
+
+            }
+
+            @Override
+            public void windowIconified(WindowEvent e) {
+
+            }
+
+            @Override
+            public void windowDeiconified(WindowEvent e) {
+
+            }
+
+            @Override
+            public void windowActivated(WindowEvent e) {
+
+            }
+
+            @Override
+            public void windowDeactivated(WindowEvent e) {
+
+            }
+        });
     }
 
     public void Management_Frame() {

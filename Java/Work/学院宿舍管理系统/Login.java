@@ -8,8 +8,6 @@ public class Login {
     HashMap<String, String> login_map = new HashMap<>(); // 保存用户账号密码
 
     public int password_verify(String frame_name, String frame_password) throws IOException, ClassNotFoundException { // 账号密码验证
-
-        user_out();
         int i = 0;
         Set<String> user = login_map.keySet();
         if (frame_name.equals("")) {
@@ -52,6 +50,10 @@ public class Login {
     }
 
     public void user_out() throws IOException, ClassNotFoundException { // 用户密码写出文件
+        File file = new File("password");
+        if (!file.exists()) {
+            user_in();
+        }
         FileInputStream fis = new FileInputStream("password");
         ObjectInputStream ois = new ObjectInputStream(fis);
         login_map = (HashMap<String, String>) ois.readObject();
