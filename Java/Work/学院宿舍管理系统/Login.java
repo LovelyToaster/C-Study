@@ -7,7 +7,7 @@ import java.util.Set;
 public class Login {
     HashMap<String, String> login_map = new HashMap<>(); // 保存用户账号密码
 
-    public int password_verify(String frame_name, String frame_password) throws IOException, ClassNotFoundException { // 账号密码验证
+    public int password_verify(String frame_name, String frame_password) { // 账号密码验证
         int i = 0;
         Set<String> user = login_map.keySet();
         if (frame_name.equals("")) {

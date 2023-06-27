@@ -13,7 +13,7 @@ public class Gui {
     public void Login_Frame(Student stu) throws IOException, ClassNotFoundException {
         Login login = new Login();
         login.user_out();
-        JFrame frame = new JFrame("登录窗口");
+        JFrame frame = new JFrame("登录");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(300, 200);
         frame.setLocationRelativeTo(null); // 将窗口置于屏幕中央
@@ -34,19 +34,15 @@ public class Gui {
             public void actionPerformed(ActionEvent e) {
                 String frame_name = accountTextField.getText();
                 String frame_password = String.valueOf(passwordField.getPassword());
-                try {
-                    int i = login.password_verify(frame_name, frame_password);
-                    if (i == 0) {
-                        JOptionPane.showMessageDialog(frame, "登录成功");
-                        frame.dispose();
-                        Main_Frame(stu);
-                    } else if (i == 2) {
-                        JOptionPane.showMessageDialog(frame, "请输入用户名");
-                    } else {
-                        JOptionPane.showMessageDialog(frame, "用户名或密码错误");
-                    }
-                } catch (IOException | ClassNotFoundException ex) {
-                    throw new RuntimeException(ex);
+                int i = login.password_verify(frame_name, frame_password);
+                if (i == 0) {
+                    JOptionPane.showMessageDialog(frame, "登录成功");
+                    frame.dispose();
+                    Main_Frame(stu);
+                } else if (i == 2) {
+                    JOptionPane.showMessageDialog(frame, "请输入用户名");
+                } else {
+                    JOptionPane.showMessageDialog(frame, "用户名或密码错误");
                 }
             }
         });
@@ -161,8 +157,8 @@ public class Gui {
 
         managementButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                // 处理搜索学生信息的逻辑
-                // TODO
+                frame.dispose();
+                Management_Frame(stu);
             }
         });
 
@@ -190,6 +186,7 @@ public class Gui {
         // 创建主窗口
         JFrame frame = new JFrame("学生宿舍信息管理系统");
         frame.setSize(500, 500);
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setLayout(new BorderLayout());
         frame.setLocationRelativeTo(null);
 
@@ -273,9 +270,9 @@ public class Gui {
                 if (i == 0) {
                     JOptionPane.showMessageDialog(frame, "添加成功！");
                 } else {
-                    JOptionPane.showMessageDialog(frame, "添加失败！");
+                    JOptionPane.showMessageDialog(frame, "添加失败,学号发生重复！");
+                    return;
                 }
-                frame.dispose();
                 Main_Frame(stu);
             }
         });
@@ -299,7 +296,6 @@ public class Gui {
 
             @Override
             public void windowClosing(WindowEvent e) {
-                frame.dispose();
                 Main_Frame(stu);
             }
 
@@ -330,14 +326,191 @@ public class Gui {
         });
     }
 
-    public void Management_Frame() {
+    public void Management_Frame(Student stu) {
+        JFrame frame = new JFrame("学生宿舍信息管理系统");
+        frame.setSize(600, 600);
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        frame.setLocationRelativeTo(null);
 
+        // 创建表格模型
+        String[] columnNames = { "学号", "姓名", "性别", "院部", "宿舍楼", "宿舍号", "电话" };
+        JTable table = new JTable() {
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+        DefaultTableModel stu_view = (DefaultTableModel) table.getModel();
+        stu_view.setColumnIdentifiers(columnNames);
+        for (Student s : stu.student_manage) {
+            stu_view.addRow(stu.get_student(s));
+        }
+
+        // 创建表格
+        JScrollPane scrollPane = new JScrollPane();
+        scrollPane.setViewportView(table);
+
+        JButton deleteButton = new JButton("删除");
+        JButton modButton = new JButton("修改");
+        JButton searchButton = new JButton("查询");
+        deleteButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int selectedRow = table.getSelectedRow();
+                if (selectedRow != -1) {
+                    // 获取选中的行索引
+                    String student_no = (String) table.getValueAt(selectedRow, 0);
+                    // 显示删除成功的消息框
+                    int i = JOptionPane.showConfirmDialog(frame, "你确定要删除该信息吗？", "注意", JOptionPane.OK_OPTION,
+                            JOptionPane.QUESTION_MESSAGE);
+                    if (i == JOptionPane.OK_OPTION) {
+                        // 执行删除学生宿舍操作的代码
+                        stu.delete_student(student_no);
+                        // 从表格模型中删除选中行
+                        stu_view.removeRow(selectedRow);
+                        JOptionPane.showMessageDialog(frame, "删除成功!");
+                    }
+                } else {
+                    // 如果没有选中任何行，显示提示消息框
+                    JOptionPane.showMessageDialog(frame, "请选择要删除的学生!");
+                }
+            }
+        });
+        modButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int selectedRow = table.getSelectedRow();
+                if (selectedRow != -1) {
+                    JDialog stu_dialog = new JDialog();
+                    JButton confirmButton = new JButton("确认");
+                    stu_dialog.setSize(400, 300);
+                    stu_dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+                    stu_dialog.setLocationRelativeTo(null);
+                    stu_dialog.setTitle("请输入信息");
+
+                    JTextField stu_no = new JTextField((String) table.getValueAt(selectedRow, 0), 80);
+                    JTextField stu_name = new JTextField((String) table.getValueAt(selectedRow, 1), 80);
+                    JTextField stu_sex = new JTextField((String) table.getValueAt(selectedRow, 2), 80);
+                    JTextField stu_institute = new JTextField((String) table.getValueAt(selectedRow, 3), 80);
+                    JTextField stu_dormitory = new JTextField((String) table.getValueAt(selectedRow, 4), 80);
+                    JTextField stu_dormitory_number = new JTextField((String) table.getValueAt(selectedRow, 5), 80);
+                    JTextField stu_phone = new JTextField((String) table.getValueAt(selectedRow, 6), 80);
+
+                    JPanel panel = new JPanel(new GridLayout(7, 2));
+                    panel.add(new JLabel("学号"));
+                    panel.add(stu_no);
+                    panel.add(new JLabel("姓名"));
+                    panel.add(stu_name);
+                    panel.add(new JLabel("性别"));
+                    panel.add(stu_sex);
+                    panel.add(new JLabel("院部"));
+                    panel.add(stu_institute);
+                    panel.add(new JLabel("宿舍楼"));
+                    panel.add(stu_dormitory);
+                    panel.add(new JLabel("宿舍号"));
+                    panel.add(stu_dormitory_number);
+                    panel.add(new JLabel("电话"));
+                    panel.add(stu_phone);
+
+                    confirmButton.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            Student s = new Student();
+                            s.no = stu_no.getText();
+                            s.name = stu_name.getText();
+                            s.sex = stu_sex.getText();
+                            s.institute = stu_institute.getText();
+                            s.dormitory = stu_dormitory.getText();
+                            s.dormitory_number = stu_dormitory_number.getText();
+                            s.phone = stu_phone.getText();
+                            stu.modify_student(s.no, s);
+                            Student Student_info = stu.search_student(s.no);
+                            stu_view.setRowCount(0);
+                            stu_view.addRow(stu.get_student(Student_info));
+                            stu_dialog.dispose();
+                        }
+                    });
+                    JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+                    buttonPanel.add(confirmButton);
+
+                    stu_dialog.getContentPane().setLayout(new BorderLayout());
+                    stu_dialog.getContentPane().add(panel, BorderLayout.CENTER);
+                    stu_dialog.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
+
+                    stu_dialog.setModal(true);
+                    stu_dialog.setVisible(true);
+                } else {
+                    JOptionPane.showMessageDialog(frame, "请选择要修改的学生!");
+                }
+            }
+        });
+        searchButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String[] option = { "通过学号查询", "(x)通过姓名查询", "(x)通过性别查询", "(x)通过院部查询", "占位" };
+                String info = (String) JOptionPane.showInputDialog(frame, "请选择查询方式", "提示", JOptionPane.QUESTION_MESSAGE,
+                        null, option, option[0]);
+                if (info != null && info.equals(option[0])) {
+                    String student_no = JOptionPane.showInputDialog(frame, "请输入学号", "输入", JOptionPane.QUESTION_MESSAGE);
+                    Student Student_info = stu.search_student(student_no);
+                    stu_view.setRowCount(0);
+                    stu_view.addRow(stu.get_student(Student_info));
+                }
+            }
+        });
+
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.add(searchButton);
+        buttonPanel.add(modButton);
+        buttonPanel.add(deleteButton);
+
+        frame.add(scrollPane, BorderLayout.CENTER);
+        frame.add(buttonPanel, BorderLayout.SOUTH);
+
+        frame.setVisible(true);
+
+        frame.addWindowListener(new WindowListener() {
+            @Override
+            public void windowOpened(WindowEvent e) {
+
+            }
+
+            @Override
+            public void windowClosing(WindowEvent e) {
+                Main_Frame(stu);
+            }
+
+            @Override
+            public void windowClosed(WindowEvent e) {
+
+            }
+
+            @Override
+            public void windowIconified(WindowEvent e) {
+
+            }
+
+            @Override
+            public void windowDeiconified(WindowEvent e) {
+
+            }
+
+            @Override
+            public void windowActivated(WindowEvent e) {
+
+            }
+
+            @Override
+            public void windowDeactivated(WindowEvent e) {
+
+            }
+        });
     }
 
     public void View_Frame(Student stu) {
         // 创建主窗口
         JFrame frame = new JFrame("学生宿舍信息管理系统");
         frame.setSize(600, 600);
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setLayout(new BorderLayout());
         frame.setLocationRelativeTo(null);
 
@@ -348,7 +521,6 @@ public class Gui {
                 return false;
             }
         };
-        table.getTableHeader().setReorderingAllowed(false);
         DefaultTableModel stu_view = (DefaultTableModel) table.getModel();
         stu_view.setColumnIdentifiers(columnNames);
         for (Student s : stu.student_manage) {
@@ -387,7 +559,6 @@ public class Gui {
 
             @Override
             public void windowClosing(WindowEvent e) {
-                frame.dispose();
                 Main_Frame(stu);
             }
 
