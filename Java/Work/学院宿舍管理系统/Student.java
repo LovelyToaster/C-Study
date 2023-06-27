@@ -19,6 +19,10 @@ public class Student {
                 return 1;
             }
         }
+        if (stu.no.equals("") || stu.name.equals("") || stu.institute.equals("") || stu.dormitory.equals("")
+                || stu.dormitory_number.equals("") || stu.phone.equals("")) {
+            return 3;
+        }
         student_manage.add(stu);
         try {
             student_in();
@@ -32,15 +36,45 @@ public class Student {
         return new Object[] { s.no, s.name, s.sex, s.institute, s.dormitory, s.dormitory_number, s.phone };
     }
 
-    public Student search_student(String student_no) { // 查找学生信息
-        Student info = null;
-        for (Student s : student_manage) {
-            if (student_no.equals(s.no)) {
-                info = s;
-                break;
+    public Student search_student(String student_data, Student s, int i) { // 查找学生信息
+        if (i == 0) {
+            for (Student s_no : student_manage) {
+                if (student_data.equals(s_no.no)) {
+                    return s_no;
+                }
             }
         }
-        return info;
+        if (i == 1) {
+            if (s.name.contains(student_data)) {
+                return s;
+            }
+        }
+        if (i == 2) {
+            if (student_data.equals(s.sex)) {
+                return s;
+            }
+        }
+        if (i == 3) {
+            if (student_data.equals(s.institute)) {
+                return s;
+            }
+        }
+        if (i == 4) {
+            if (student_data.equals(s.dormitory)) {
+                return s;
+            }
+        }
+        if (i == 5) {
+            if (s.dormitory_number.contains(student_data)) {
+                return s;
+            }
+        }
+        if (i == 6) {
+            if (s.phone.contains(student_data)) {
+                return s;
+            }
+        }
+        return null;
     }
 
     public void modify_student(String student_no, Student stu) { // 修改学生信息
