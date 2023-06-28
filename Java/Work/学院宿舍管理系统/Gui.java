@@ -134,7 +134,7 @@ public class Gui {
 
         // 创建面板
         JPanel panel = new JPanel();
-        panel.setLayout(new GridLayout(5, 1));
+        panel.setLayout(new GridLayout(6, 1));
         panel.setBackground(new Color(135, 206, 235));
 
         // 创建标题标签
@@ -171,6 +171,13 @@ public class Gui {
         passwordmodButton.setFocusPainted(false);
         passwordmodButton.setBorderPainted(false);
 
+        JButton exitButton = new JButton("退出到登陆界面");
+        exitButton.setBackground(new Color(70, 130, 180));
+        exitButton.setFont(new Font("宋体", Font.BOLD, 20));
+        exitButton.setForeground(Color.WHITE);
+        exitButton.setFocusPainted(false);
+        exitButton.setBorderPainted(false);
+
         // 添加按钮点击事件监听器
         addButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -205,8 +212,8 @@ public class Gui {
 
                 JTextField user_frame = new JTextField(user, 80);
                 user_frame.setEditable(false);
-                JTextField password_frame = new JTextField(80);
-                JTextField restart_password_frame = new JTextField(80);
+                JPasswordField password_frame = new JPasswordField(80);
+                JPasswordField restart_password_frame = new JPasswordField(80);
 
                 JPanel panel = new JPanel(new GridLayout(5, 2));
                 panel.add(new JLabel("当前登录用户"));
@@ -219,8 +226,8 @@ public class Gui {
                 confirmButton.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        String password = password_frame.getText();
-                        String restart_password = restart_password_frame.getText();
+                        String password = String.valueOf(password_frame.getPassword());
+                        String restart_password = String.valueOf(restart_password_frame.getPassword());
                         int i = login.password_mod(user, password, restart_password);
                         if (i == 0) {
                             JOptionPane.showMessageDialog(frame, "密码修改成功!");
@@ -243,6 +250,17 @@ public class Gui {
                 stu_dialog.setVisible(true);
             }
         });
+        exitButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                frame.dispose();
+                try {
+                    Login_Frame(stu);
+                } catch (IOException | ClassNotFoundException ex) {
+                    throw new RuntimeException(ex);
+                }
+            }
+        });
 
         // 将组件添加到面板中
         panel.add(titleLabel);
@@ -250,6 +268,7 @@ public class Gui {
         panel.add(managementButton);
         panel.add(viewButton);
         panel.add(passwordmodButton);
+        panel.add(exitButton);
 
         // 将面板添加到主窗口中
         frame.add(panel, BorderLayout.CENTER);
@@ -484,11 +503,13 @@ public class Gui {
                     JTextField stu_no = new JTextField((String) table.getValueAt(selectedRow, 0), 80);
                     stu_no.setEditable(false);
                     JTextField stu_name = new JTextField((String) table.getValueAt(selectedRow, 1), 80);
-                    JTextField stu_sex = new JTextField((String) table.getValueAt(selectedRow, 2), 80);
                     JTextField stu_institute = new JTextField((String) table.getValueAt(selectedRow, 3), 80);
                     JTextField stu_dormitory = new JTextField((String) table.getValueAt(selectedRow, 4), 80);
                     JTextField stu_dormitory_number = new JTextField((String) table.getValueAt(selectedRow, 5), 80);
                     JTextField stu_phone = new JTextField((String) table.getValueAt(selectedRow, 6), 80);
+
+                    String[] sex = { "男", "女" };
+                    JComboBox sexComboBox = new JComboBox(sex);
 
                     JPanel panel = new JPanel(new GridLayout(7, 2));
                     panel.add(new JLabel("学号"));
@@ -496,7 +517,7 @@ public class Gui {
                     panel.add(new JLabel("姓名"));
                     panel.add(stu_name);
                     panel.add(new JLabel("性别"));
-                    panel.add(stu_sex);
+                    panel.add(sexComboBox);
                     panel.add(new JLabel("院部"));
                     panel.add(stu_institute);
                     panel.add(new JLabel("宿舍楼"));
@@ -512,15 +533,14 @@ public class Gui {
                             Student s = new Student();
                             s.no = stu_no.getText();
                             s.name = stu_name.getText();
-                            s.sex = stu_sex.getText();
+                            s.sex = (String) sexComboBox.getSelectedItem();
                             s.institute = stu_institute.getText();
                             s.dormitory = stu_dormitory.getText();
                             s.dormitory_number = stu_dormitory_number.getText();
                             s.phone = stu_phone.getText();
                             int i = stu.modify_student(s.no, s);
-                            System.out.println(i);
                             if (i == 4) {
-                                JOptionPane.showMessageDialog(frame, "添加失败,电话发生重复！");
+                                JOptionPane.showMessageDialog(frame, "修改失败,电话发生重复！");
                             } else {
                                 Student Student_info = stu.search_student(s.no, s, 0);
                                 stu_view.setRowCount(0);
@@ -551,17 +571,15 @@ public class Gui {
                         null, option, option[0]);
                 if (info != null && info.equals(option[0])) {
                     String student_no = JOptionPane.showInputDialog(frame, "请输入学号", "输入", JOptionPane.QUESTION_MESSAGE);
-                    Student Student_info = stu.search_student(student_no, stu, 0);
-                    if (Student_info != null && !Student_info.equals(stu)) {
-                        stu_view.setRowCount(0);
-                        stu_view.addRow(stu.get_student(Student_info));
-                    } else if (Student_info == null) {
-                        JOptionPane.showMessageDialog(frame, "没有查询到信息!");
-                    } else {
-                        stu_view.setRowCount(0);
-                        for (Student s : stu.student_manage) {
-                            stu_view.addRow(stu.get_student(s));
+                    try {
+                        Student Student_info = stu.search_student(student_no, stu, 0);
+                        if (Student_info != null) {
+                            stu_view.setRowCount(0);
+                            stu_view.addRow(stu.get_student(Student_info));
+                        } else {
+                            JOptionPane.showMessageDialog(frame, "没有查询到信息!");
                         }
+                    } catch (NullPointerException ignored) {
                     }
                 }
                 if (info != null && info.equals(option[1])) {
@@ -602,23 +620,24 @@ public class Gui {
                     }
                 }
                 if (info != null && info.equals(option[3])) {
-                    if (stu.student_manage != null) {
-                        int i = 0;
-                        int j = 0;
-                        ArrayList<String> option_array = new ArrayList<>();
-                        for (Student s : stu.student_manage) {
-                            for (String str : option_array) {
-                                if (str.equals(s.institute)) {
-                                    j = 1;
-                                }
+                    int i = 0;
+                    int j = 0;
+                    ArrayList<String> option_array = new ArrayList<>();
+                    for (Student s : stu.student_manage) {
+                        for (String str : option_array) {
+                            if (str.equals(s.institute)) {
+                                j = 1;
+                                break;
                             }
-                            if (j == 1) {
-                                j = 0;
-                                continue;
-                            }
-                            option_array.add(s.institute);
                         }
-                        String[] option_institute = option_array.toArray(new String[0]);
+                        if (j == 1) {
+                            j = 0;
+                            continue;
+                        }
+                        option_array.add(s.institute);
+                    }
+                    String[] option_institute = option_array.toArray(new String[0]);
+                    try {
                         String student_institute = (String) JOptionPane.showInputDialog(frame, "请选择院部", "提示",
                                 JOptionPane.QUESTION_MESSAGE, null, option_institute, option_institute[0]);
                         for (Student s : stu.student_manage) {
@@ -631,29 +650,31 @@ public class Gui {
                                 stu_view.addRow(stu.get_student(Student_info));
                             }
                         }
-                    } else {
+                    } catch (ArrayIndexOutOfBoundsException e2) {
                         JOptionPane.showMessageDialog(frame, "没有数据可查询!");
                     }
+
                 }
                 if (info != null && info.equals(option[4])) {
-                    if (stu.student_manage != null) {
-                        int i = 0;
-                        int j = 0;
-                        ArrayList<String> option_array = new ArrayList<>();
-                        for (Student s : stu.student_manage) {
-                            for (String str : option_array) {
-                                if (str.equals(s.dormitory)) {
-                                    j = 1;
-                                }
+                    int i = 0;
+                    int j = 0;
+                    ArrayList<String> option_array = new ArrayList<>();
+                    for (Student s : stu.student_manage) {
+                        for (String str : option_array) {
+                            if (str.equals(s.dormitory)) {
+                                j = 1;
+                                break;
                             }
-                            if (j == 1) {
-                                j = 0;
-                                continue;
-                            }
-                            option_array.add(s.dormitory);
                         }
-                        String[] option_dormitory = option_array.toArray(new String[0]);
-                        String student_institute = (String) JOptionPane.showInputDialog(frame, "请选择院部", "提示",
+                        if (j == 1) {
+                            j = 0;
+                            continue;
+                        }
+                        option_array.add(s.dormitory);
+                    }
+                    String[] option_dormitory = option_array.toArray(new String[0]);
+                    try {
+                        String student_institute = (String) JOptionPane.showInputDialog(frame, "请选择宿舍楼", "提示",
                                 JOptionPane.QUESTION_MESSAGE, null, option_dormitory, option_dormitory[0]);
                         for (Student s : stu.student_manage) {
                             Student Student_info = stu.search_student(student_institute, s, 4);
@@ -665,9 +686,10 @@ public class Gui {
                                 stu_view.addRow(stu.get_student(Student_info));
                             }
                         }
-                    } else {
+                    } catch (ArrayIndexOutOfBoundsException e2) {
                         JOptionPane.showMessageDialog(frame, "没有数据可查询!");
                     }
+
                 }
                 if (info != null && info.equals(option[5])) {
                     int i = 0;
@@ -689,7 +711,7 @@ public class Gui {
                 }
                 if (info != null && info.equals(option[6])) {
                     int i = 0;
-                    String student_phone = JOptionPane.showInputDialog(frame, "请输入宿舍号", "输入",
+                    String student_phone = JOptionPane.showInputDialog(frame, "请输入电话", "输入",
                             JOptionPane.QUESTION_MESSAGE);
                     for (Student s : stu.student_manage) {
                         Student Student_info = stu.search_student(student_phone, s, 6);
