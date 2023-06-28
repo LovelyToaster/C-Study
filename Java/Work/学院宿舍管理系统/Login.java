@@ -27,20 +27,52 @@ public class Login {
         if (!frame_password.equals(this_password)) { // 验证密码
             return 1;
         }
-
         return 0;
 
     }
 
-    public int user_register(String frame_new_name, String frame_new_password) throws IOException { // 注册
+    public int user_register(String frame_new_name, String frame_new_password) { // 注册
         if (frame_new_name.equals("") || frame_new_password.equals(""))
             return 1;
         if (login_map.containsKey(frame_new_name)) { // 判断重复
             return 2;
         }
         login_map.put(frame_new_name, frame_new_password); // 前面用户名，后面密码
-        user_in();
+        try {
+            user_in();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         return 0;
+    }
+
+    public int password_restart(String user) {
+        if (login_map.containsKey(user)) { // 判断重复
+            login_map.put(user, "123456");
+            try {
+                user_in();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            return 0;
+        }
+        return 1;
+    }
+
+    public int password_mod(String user, String password, String restart_password) {
+        if (restart_password.equals("") || password.equals("")) {
+            return 1;
+        }
+        if (login_map.get(user).equals(password)) {
+            login_map.put(user, restart_password);
+            try {
+                user_in();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            return 0;
+        }
+        return 2;
     }
 
     public void user_in() throws IOException { // 用户密码写入文件

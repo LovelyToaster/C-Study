@@ -16,7 +16,7 @@ public class Gui {
         login.user_out();
         JFrame frame = new JFrame("登录");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(300, 200);
+        frame.setSize(300, 250);
         frame.setLocationRelativeTo(null); // 将窗口置于屏幕中央
 
         JPanel panel = new JPanel();
@@ -39,7 +39,7 @@ public class Gui {
                 if (i == 0) {
                     JOptionPane.showMessageDialog(frame, "登录成功");
                     frame.dispose();
-                    Main_Frame(stu);
+                    Main_Frame(stu, frame_name, login);
                 } else if (i == 2) {
                     JOptionPane.showMessageDialog(frame, "请输入用户名");
                 } else {
@@ -53,17 +53,26 @@ public class Gui {
             public void actionPerformed(ActionEvent e) {
                 String frame_new_name = accountTextField.getText();
                 String frame_new_password = String.valueOf(passwordField.getPassword());
-                try {
-                    int i = login.user_register(frame_new_name, frame_new_password);
-                    if (i == 0) {
-                        JOptionPane.showMessageDialog(frame, "注册成功");
-                    } else if (i == 1) {
-                        JOptionPane.showMessageDialog(frame, "请输入用户名或密码");
-                    } else {
-                        JOptionPane.showMessageDialog(frame, "用户名重复");
-                    }
-                } catch (IOException ex) {
-                    throw new RuntimeException(ex);
+                int i = login.user_register(frame_new_name, frame_new_password);
+                if (i == 0) {
+                    JOptionPane.showMessageDialog(frame, "注册成功");
+                } else if (i == 1) {
+                    JOptionPane.showMessageDialog(frame, "请输入用户名或密码");
+                } else {
+                    JOptionPane.showMessageDialog(frame, "用户名重复");
+                }
+            }
+        });
+        JButton restartButton = new JButton("重置密码");
+        restartButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String user = JOptionPane.showInputDialog(frame, "请输入要重置的用户名:", "输入", JOptionPane.QUESTION_MESSAGE);
+                int i = login.password_restart(user);
+                if (i == 0) {
+                    JOptionPane.showMessageDialog(frame, "密码重置成功，默认密码为123456!");
+                } else {
+                    JOptionPane.showMessageDialog(frame, "密码重置失败，未找到用户名!");
                 }
             }
         });
@@ -103,12 +112,19 @@ public class Gui {
         constraints.insets = new Insets(20, 5, 5, 5); // 调整上方间距
         panel.add(registerButton, constraints);
 
+        constraints.gridx = 0;
+        constraints.gridy = 3;
+        constraints.gridwidth = 2;
+        constraints.fill = GridBagConstraints.BOTH;
+        constraints.insets = new Insets(20, 5, 5, 5); // 调整上方间距
+        panel.add(restartButton, constraints);
+
         frame.add(panel);
         frame.setVisible(true);
 
     }
 
-    public void Main_Frame(Student stu) {
+    public void Main_Frame(Student stu, String user, Login login) {
         // 创建主窗口
         JFrame frame = new JFrame("学生宿舍信息管理系统");
         frame.setSize(500, 600);
@@ -118,7 +134,7 @@ public class Gui {
 
         // 创建面板
         JPanel panel = new JPanel();
-        panel.setLayout(new GridLayout(4, 1));
+        panel.setLayout(new GridLayout(5, 1));
         panel.setBackground(new Color(135, 206, 235));
 
         // 创建标题标签
@@ -148,25 +164,83 @@ public class Gui {
         viewButton.setFocusPainted(false);
         viewButton.setBorderPainted(false);
 
+        JButton passwordmodButton = new JButton("修改密码");
+        passwordmodButton.setBackground(new Color(70, 130, 180));
+        passwordmodButton.setFont(new Font("宋体", Font.BOLD, 20));
+        passwordmodButton.setForeground(Color.WHITE);
+        passwordmodButton.setFocusPainted(false);
+        passwordmodButton.setBorderPainted(false);
+
         // 添加按钮点击事件监听器
         addButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 frame.dispose();
-                Add_Frame(stu);
+                Add_Frame(stu, user, login);
             }
         });
 
         managementButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 frame.dispose();
-                Management_Frame(stu);
+                Management_Frame(stu, user, login);
             }
         });
 
         viewButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 frame.dispose();
-                View_Frame(stu);
+                View_Frame(stu, user, login);
+            }
+        });
+
+        passwordmodButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JDialog stu_dialog = new JDialog();
+                JButton confirmButton = new JButton("确认");
+                stu_dialog.setSize(400, 300);
+                stu_dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+                stu_dialog.setLocationRelativeTo(null);
+                stu_dialog.setTitle("请输入信息");
+
+                JTextField user_frame = new JTextField(user, 80);
+                user_frame.setEditable(false);
+                JTextField password_frame = new JTextField(80);
+                JTextField restart_password_frame = new JTextField(80);
+
+                JPanel panel = new JPanel(new GridLayout(5, 2));
+                panel.add(new JLabel("当前登录用户"));
+                panel.add(user_frame);
+                panel.add(new JLabel("当前密码"));
+                panel.add(password_frame);
+                panel.add(new JLabel("新的密码"));
+                panel.add(restart_password_frame);
+
+                confirmButton.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        String password = password_frame.getText();
+                        String restart_password = restart_password_frame.getText();
+                        int i = login.password_mod(user, password, restart_password);
+                        if (i == 0) {
+                            JOptionPane.showMessageDialog(frame, "密码修改成功!");
+                        } else if (i == 1) {
+                            JOptionPane.showMessageDialog(frame, "请输入完整信息!");
+                        } else {
+                            JOptionPane.showMessageDialog(frame, "当前密码输入错误,请重新输入!");
+                        }
+                    }
+                });
+
+                JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+                buttonPanel.add(confirmButton);
+
+                stu_dialog.getContentPane().setLayout(new BorderLayout());
+                stu_dialog.getContentPane().add(panel, BorderLayout.CENTER);
+                stu_dialog.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
+
+                stu_dialog.setModal(true);
+                stu_dialog.setVisible(true);
             }
         });
 
@@ -175,6 +249,7 @@ public class Gui {
         panel.add(addButton);
         panel.add(managementButton);
         panel.add(viewButton);
+        panel.add(passwordmodButton);
 
         // 将面板添加到主窗口中
         frame.add(panel, BorderLayout.CENTER);
@@ -183,7 +258,7 @@ public class Gui {
         frame.setVisible(true);
     }
 
-    public void Add_Frame(Student stu) {
+    public void Add_Frame(Student stu, String user, Login login) {
         // 创建主窗口
         JFrame frame = new JFrame("学生宿舍信息管理系统");
         frame.setSize(400, 400);
@@ -261,6 +336,7 @@ public class Gui {
         // 添加按钮点击事件监听器
         addButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+                int j = 0;
                 Student stu_data = new Student();
                 stu_data.no = noTextField.getText();
                 stu_data.name = nameTextField.getText();
@@ -271,15 +347,25 @@ public class Gui {
                 stu_data.phone = phoneTextField.getText();
                 int i = stu.add_student(stu_data);
                 if (i == 0) {
-                    JOptionPane.showMessageDialog(frame, "添加成功！");
+                    int option = JOptionPane.showConfirmDialog(frame, "添加成功,要继续添加吗?", "提示", JOptionPane.OK_OPTION,
+                            JOptionPane.QUESTION_MESSAGE);
+                    if (option == JOptionPane.OK_OPTION) {
+                        frame.dispose();
+                        Add_Frame(stu, user, login);
+                        j = 1;
+                    }
                 } else if (i == 1) {
                     JOptionPane.showMessageDialog(frame, "添加失败,学号发生重复！");
+                    return;
+                } else if (i == 4) {
+                    JOptionPane.showMessageDialog(frame, "添加失败,电话发生重复！");
                     return;
                 } else {
                     JOptionPane.showMessageDialog(frame, "添加失败,信息未输入完整！");
                     return;
                 }
-                Main_Frame(stu);
+                if (j == 0)
+                    Main_Frame(stu, user, login);
             }
         });
 
@@ -302,7 +388,7 @@ public class Gui {
 
             @Override
             public void windowClosing(WindowEvent e) {
-                Main_Frame(stu);
+                Main_Frame(stu, user, login);
             }
 
             @Override
@@ -332,7 +418,7 @@ public class Gui {
         });
     }
 
-    public void Management_Frame(Student stu) {
+    public void Management_Frame(Student stu, String user, Login login) {
         JFrame frame = new JFrame("学生宿舍信息管理系统");
         frame.setSize(700, 700);
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -396,6 +482,7 @@ public class Gui {
                     stu_dialog.setTitle("请输入信息");
 
                     JTextField stu_no = new JTextField((String) table.getValueAt(selectedRow, 0), 80);
+                    stu_no.setEditable(false);
                     JTextField stu_name = new JTextField((String) table.getValueAt(selectedRow, 1), 80);
                     JTextField stu_sex = new JTextField((String) table.getValueAt(selectedRow, 2), 80);
                     JTextField stu_institute = new JTextField((String) table.getValueAt(selectedRow, 3), 80);
@@ -430,11 +517,16 @@ public class Gui {
                             s.dormitory = stu_dormitory.getText();
                             s.dormitory_number = stu_dormitory_number.getText();
                             s.phone = stu_phone.getText();
-                            stu.modify_student(s.no, s);
-                            Student Student_info = stu.search_student(s.no, s, 0);
-                            stu_view.setRowCount(0);
-                            stu_view.addRow(stu.get_student(Student_info));
-                            stu_dialog.dispose();
+                            int i = stu.modify_student(s.no, s);
+                            System.out.println(i);
+                            if (i == 4) {
+                                JOptionPane.showMessageDialog(frame, "添加失败,电话发生重复！");
+                            } else {
+                                Student Student_info = stu.search_student(s.no, s, 0);
+                                stu_view.setRowCount(0);
+                                stu_view.addRow(stu.get_student(Student_info));
+                                stu_dialog.dispose();
+                            }
                         }
                     });
                     JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
@@ -460,11 +552,16 @@ public class Gui {
                 if (info != null && info.equals(option[0])) {
                     String student_no = JOptionPane.showInputDialog(frame, "请输入学号", "输入", JOptionPane.QUESTION_MESSAGE);
                     Student Student_info = stu.search_student(student_no, stu, 0);
-                    if (Student_info != null) {
+                    if (Student_info != null && !Student_info.equals(stu)) {
                         stu_view.setRowCount(0);
                         stu_view.addRow(stu.get_student(Student_info));
-                    } else {
+                    } else if (Student_info == null) {
                         JOptionPane.showMessageDialog(frame, "没有查询到信息!");
+                    } else {
+                        stu_view.setRowCount(0);
+                        for (Student s : stu.student_manage) {
+                            stu_view.addRow(stu.get_student(s));
+                        }
                     }
                 }
                 if (info != null && info.equals(option[1])) {
@@ -638,7 +735,7 @@ public class Gui {
 
             @Override
             public void windowClosing(WindowEvent e) {
-                Main_Frame(stu);
+                Main_Frame(stu, user, login);
             }
 
             @Override
@@ -668,7 +765,7 @@ public class Gui {
         });
     }
 
-    public void View_Frame(Student stu) {
+    public void View_Frame(Student stu, String user, Login login) {
         // 创建主窗口
         JFrame frame = new JFrame("学生宿舍信息管理系统");
         frame.setSize(700, 700);
@@ -722,7 +819,7 @@ public class Gui {
 
             @Override
             public void windowClosing(WindowEvent e) {
-                Main_Frame(stu);
+                Main_Frame(stu, user, login);
             }
 
             public void windowClosed(WindowEvent e) {
