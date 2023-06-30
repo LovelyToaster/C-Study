@@ -9,10 +9,10 @@ public class Login {
 
     public int password_verify(String frame_name, String frame_password) { // 账号密码验证
         int i = 0;
-        Set<String> user = login_map.keySet();
-        if (frame_name.equals("")) {
+        if (frame_name.equals("") || frame_password.equals("")) {
             return 2;
         }
+        Set<String> user = login_map.keySet();
         String this_name = null;
         for (String s : user) {
             this_name = s;
@@ -55,6 +55,9 @@ public class Login {
                 throw new RuntimeException(e);
             }
             return 0;
+        }
+        if (user == null) {
+            return 2;
         }
         return 1;
     }

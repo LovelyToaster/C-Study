@@ -71,7 +71,7 @@ public class Gui {
                 int i = login.password_restart(user);
                 if (i == 0) {
                     JOptionPane.showMessageDialog(frame, "密码重置成功，默认密码为123456!");
-                } else {
+                } else if (i == 1) {
                     JOptionPane.showMessageDialog(frame, "密码重置失败，未找到用户名!");
                 }
             }

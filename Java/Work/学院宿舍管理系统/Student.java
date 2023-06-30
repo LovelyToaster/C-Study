@@ -14,6 +14,10 @@ public class Student {
     ArrayList<Student> student_manage = new ArrayList<>();
 
     public int add_student(Student stu) { // 添加学生
+        if (stu.no.equals("") || stu.name.equals("") || stu.institute.equals("") || stu.dormitory.equals("")
+                || stu.dormitory_number.equals("") || stu.phone.equals("")) {
+            return 3;
+        }
         for (Student s : student_manage) {
             if (stu.no.equals(s.no)) {
                 return 1;
@@ -21,10 +25,6 @@ public class Student {
             if (stu.phone.equals((s.phone))) {
                 return 4;
             }
-        }
-        if (stu.no.equals("") || stu.name.equals("") || stu.institute.equals("") || stu.dormitory.equals("")
-                || stu.dormitory_number.equals("") || stu.phone.equals("")) {
-            return 3;
         }
         student_manage.add(stu);
         try {
